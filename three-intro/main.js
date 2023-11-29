@@ -11,7 +11,8 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const renderer = new THREE.WebGLRenderer({
 canvas: document.querySelector('#bg')
 });
-camera.position.setZ(30);
+// camera.position.setZ(30);
+
 
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.render(scene, camera);
@@ -80,19 +81,19 @@ const groupToRotateAround = new THREE.Group();
 groupToRotateAround.add(moon)
 
 scene.add(groupToRotateAround);
-moon.position.set(20, 0, 20) //same as .x = 20 and .z = 20 or .setX(20)
+moon.position.set(-20, 0, -20) //same as .x = 20 and .z = 20 or .setX(20)
 
 
 function moveCamera(){
     const t = document.body.getBoundingClientRect().top
 
-    torus.rotation.x += 0.01;
-    torus.rotation.y += 0.005;
-    torus.rotation.z += 0.01
+    torus.rotation.x = t * 0.001;
+    torus.rotation.y = t * 0.0005;
+    torus.rotation.z = t * 0.001
 
 
-    moon.rotation.y += 0.005
-    groupToRotateAround.rotation.y += 0.01
+    moon.rotation.y = t * 0.005
+    groupToRotateAround.rotation.y = t * 0.001
 
     camera.position.z = t * -0.01;
     camera.position.x = t * -0.0002;
