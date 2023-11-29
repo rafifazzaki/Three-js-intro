@@ -80,11 +80,11 @@ const groupToRotateAround = new THREE.Group();
 groupToRotateAround.add(moon)
 
 scene.add(groupToRotateAround);
-moon.position.set(20, 0, 20)
+moon.position.set(20, 0, 20) //same as .x = 20 and .z = 20 or .setX(20)
 
-// cool stuff, no ambient light, point light 5, 5, 5 and wireframe. torusgeo(10, 3, 16, 120), PointLight(0xffffff, 1.5), and positoin 5, 5, 5
-function animate(){ //Update function 
-    requestAnimationFrame(animate);
+
+function moveCamera(){
+    const t = document.body.getBoundingClientRect().top
 
     torus.rotation.x += 0.01;
     torus.rotation.y += 0.005;
@@ -92,8 +92,29 @@ function animate(){ //Update function
 
 
     moon.rotation.y += 0.005
-
     groupToRotateAround.rotation.y += 0.01
+
+    camera.position.z = t * -0.01;
+    camera.position.x = t * -0.0002;
+    camera.rotation.y = t * -0.0002;
+
+
+}
+
+document.body.onscroll = moveCamera //attach function when onScroll
+
+
+// cool stuff, no ambient light, point light 5, 5, 5 and wireframe. torusgeo(10, 3, 16, 120), PointLight(0xffffff, 1.5), and positoin 5, 5, 5
+function animate(){ //Update function 
+    requestAnimationFrame(animate);
+
+    // torus.rotation.x += 0.01;
+    // torus.rotation.y += 0.005;
+    // torus.rotation.z += 0.01
+
+
+    // moon.rotation.y += 0.005
+    // groupToRotateAround.rotation.y += 0.01
     
     controls.update();
 
