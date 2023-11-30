@@ -49,7 +49,7 @@ function addStars(){
 const z = Array(100).fill().forEach(() => {addStars()});
 
 
-const controls = new OrbitControls( camera, renderer.domElement );
+// const controls = new OrbitControls( camera, renderer.domElement );
 
 
 const spaceTexture = new THREE.TextureLoader().load('nebula.png');
@@ -117,7 +117,7 @@ function animate(){ //Update function
     // moon.rotation.y += 0.005
     // groupToRotateAround.rotation.y += 0.01
     
-    controls.update();
+    // controls.update(); //orbit control
 
     renderer.render(scene, camera);
 }

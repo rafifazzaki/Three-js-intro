@@ -1,5 +1,6 @@
 *{
-  font-size: 10vw;
+  font-size: 3vw;
+  text-align: center;
 }
 
 canvas {
@@ -8,17 +9,84 @@ canvas {
   left:0;
 }
 
-main{
-  position: absolute;
+
+
+
+body{
+  margin: 0;
 }
 
-/* body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-} */
+nav{
+  position: sticky;
+  overflow: auto;
+  background-color: green;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.nav-left{
+float: left;
+}
+
+.nav ul li{
+  float: left;
+  padding: 1vw;
+}
+
+.nav-right{
+  float: right;
+}
+
+.nav-right ul li{
+  float: right;
+  padding: 1vw;
+}
+
+.nav a:hover{
+  background-color: rgb(31, 31, 31);
+}
 
 
-/* html, body { width:100%; height:100%; } */
+
+main{
+  position: absolute;
+  
+  margin: 20vw;
+  margin-bottom: 20vw;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  border-style: solid;
+  border-color: black;
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+
+  backdrop-filter: blur(10px);
+}
+
+.main-bg{
+  background-color: aliceblue;
+
+}
+
+header{
+  grid-column: 2/12;
+
+}
+
+section{
+  grid-column: 3/11;
+  border-style: solid;
+  border-color: black;
+  padding: 1rem;
+
+  font-size: 2vw;
+
+}
+
+blockquote{
+  grid-column: 2 / span 10;
+}
