@@ -99,7 +99,6 @@ function moveCamera(){
     camera.position.x = t * -0.0002;
     camera.rotation.y = t * -0.0002;
 
-
 }
 
 document.body.onscroll = moveCamera //attach function when onScroll
