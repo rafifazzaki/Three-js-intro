@@ -13,7 +13,7 @@ canvas: document.querySelector('#bg')
 });
 // camera.position.setZ(30);
 
-
+renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.render(scene, camera);
 
