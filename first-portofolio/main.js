@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { degToRad } from 'three/src/math/MathUtils';
 
-import TWEEN from '@tweenjs/tween.js'
+import TWEEN, { Tween } from '@tweenjs/tween.js'
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
@@ -31,6 +31,8 @@ const gridHelper = new THREE.GridHelper(200, 50)
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.enablePan = false;
 controls.enableZoom = false;
+controls.enableDamping = true
+controls.maxPolarAngle = Math.PI/2; 
 // scene.add(gridHelper)
 scene.add(controls)
 
@@ -44,6 +46,7 @@ const plane = new THREE.Mesh(
   new THREE.PlaneGeometry(200, 200),
   new THREE.MeshStandardMaterial()
 )
+plane.position.setY(-1.5)
 scene.add(plane)
 
 plane.rotateX(degToRad(-90))
@@ -61,6 +64,25 @@ home_click.onclick = clearPage
 function clearPage(){
   document.getElementById("PAGE_CV").setAttribute("style", "display: none");
   document.getElementById("PAGE_Portofolio").setAttribute("style", "display: none");
+  
+  var t = new TWEEN.Tween(controls.target).to(
+    {
+      x: 0,
+      y: 0,
+      z: 0
+    }, 1000)
+    .easing(TWEEN.Easing.Quadratic.Out)
+    .start()
+    .onComplete(function(){
+      controls.enableRotate = true;
+    })
+
+  new TWEEN.Tween(camera.position).to(new THREE.Vector3(20, 15, 20), 1000)
+  .easing(TWEEN.Easing.Cubic.Out)
+  .start()
+  .onStart(function(){
+    controls.enableRotate = false;
+  })
 }
 
 function showPortofolio () {
@@ -71,15 +93,43 @@ function showPortofolio () {
 function showCV(){
   document.getElementById("PAGE_CV").setAttribute("style", "display: block");
   document.getElementById("PAGE_Portofolio").setAttribute("style", "display: none");
+  controls.enableRotate = false;
+
 
   new TWEEN.Tween(controls.target).to({
-    x: 0,
-    y: 0,
-    z: 0
-  }, 500)
+    x: camera.position.x - 1 * checkQuadrant(camera.position).x,
+    y: camera.position.y - 5,
+    z: camera.position.z - 1 * checkQuadrant(camera.position).y
+  }, 1000)
   .easing(TWEEN.Easing.Cubic.Out)
   .start()
 
+  // new TWEEN.Tween(camera.position).to({
+  //   x: camera.position.x + 10 * checkQuadrant(camera.position).x,
+  //   y: camera.position.y,
+  //   z: camera.position.z + 10 * checkQuadrant(camera.position).y
+  // }, 1000)
+  // .easing(TWEEN.Easing.Cubic.Out)
+  // .start()
+  
+}
+
+function checkQuadrant(objectPosition){
+  let number;
+  if(objectPosition.x > 0 && objectPosition.z > 0){
+    // kuadran 1
+    number = new THREE.Vector2(1, 1);
+  }else if(objectPosition.x < 0 && objectPosition.z > 0){
+    // kuadran 2
+    number = new THREE.Vector2(-1, 1);
+  }else if(objectPosition.x < 0 && objectPosition.z < 0){
+    // kuadran 3
+    number = new THREE.Vector2(-1, -1);
+  }else if(objectPosition.x > 0 && objectPosition.z < 0){
+    // kuadran 4
+    number = new THREE.Vector2(1, -1);
+  }
+  return number
 }
 
 
@@ -87,6 +137,8 @@ function animate(){
   requestAnimationFrame(animate)
 
   controls.update();
+
+  TWEEN.update()
 
   renderer.render(scene, camera);
 }
