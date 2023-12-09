@@ -7,6 +7,7 @@
     <title>Vite App</title>
   </head>
   <body>
+    <script type="module" src="/main.js"></script>
     <canvas id="bg"></canvas>
 
     <nav class="nav"> 
@@ -18,9 +19,9 @@
         </div>
         <div class="nav-right">
           <ul>
-            <li><a href="javascript:void(0);" id="Contact">Contact</a></li>
-            <li><a href="javascript:void(0);" id="Porto_click">Portofolio</a></li>
+            <li><a href="javascript:void(0);" id="Contact_click">Contact</a></li>
             <li><a href="javascript:void(0);" id="CV_click">CV</a></li>
+            <!-- <li><a href="javascript:void(0);" id="Porto_click">Portofolio</a></li> -->
           </ul>
         </div>
       </div>
@@ -28,11 +29,37 @@
 
     <div id="container">
       <div id="PAGE_CV">
-        <p>TESTAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+        <section>
+          <h2>📜 Header2 manifesto</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+          
+          <div class="button-container">
+            <button class="button" id="Back_button">&lt;</button>
+          </div>
+        </section>
       </div>
 
       <div id="PAGE_Portofolio">
-        <p>TESTBBBBBBBBBBBBBBBBBB</p>
+        <section>
+          <h2>📜 Header2 manifesto</h2>
+          <table>
+            <tr>
+              <td rowspan="2">1</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>3</td>
+            </tr>
+          </table>
+        </section>
       </div>
     </div>
 
@@ -41,6 +68,6 @@
       <!-- <span class="right">blibli</span> -->
     </div>
     
-    <script type="module" src="/main.js"></script>
+    
   </body>
 </html>
