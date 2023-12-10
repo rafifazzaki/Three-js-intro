@@ -9,7 +9,7 @@ import TWEEN, { Tween } from '@tweenjs/tween.js'
 
 
 // 
-// // init
+// // INIT THREE JS
 // 
 
 const scene = new THREE.Scene();
@@ -25,14 +25,14 @@ renderer.render(scene, camera);
 
 
 // 
-// // geometry
+// // THREE JS GEOMETRY
 // 
+
 const geometry = new THREE.TorusGeometry(10, 3, 16, 120)
 const material = new THREE.MeshBasicMaterial({color:0xE58943, wireframe:true}); //0x818589
 const torus = new THREE.Mesh(geometry, material)
 // torus.rotateY(degToRad(45))
 // scene.add(torus);
-
 const gridHelper = new THREE.GridHelper(200, 50)
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.enablePan = false;
@@ -70,12 +70,14 @@ loader.load(
     // })
     base.scale.set(7, 7, 7);
     base.position.setY(-1.5)
-    // scene.add(base);
+    scene.add(base);
   }
 )
 
 
-
+// 
+// // PAGE CONTENT
+// 
 
 var cv_page = document.getElementById('CV_click');
 // var porto_page = document.getElementById('Porto_click');
@@ -84,10 +86,10 @@ var back_button = document.getElementById('Back_button');
 cv_page.onclick = showCV;
 // porto_page.onclick = showPortofolio;
 home_page.onclick = clearPage;
-back_button.onclick = goBack;
+back_button.onclick = goBackPage;
 
 
-function goBack(){
+function goBackPage(){
   document.getElementById("PAGE_CV").setAttribute("style", "display: none");
   document.getElementById("PAGE_Portofolio").setAttribute("style", "display: none");
   document.getElementById("container").setAttribute("style", "position: static;");
@@ -104,7 +106,6 @@ function goBack(){
       controls.enableRotate = true;
     })
 }
-
 function clearPage(){
   document.getElementById("PAGE_CV").setAttribute("style", "display: none");
   document.getElementById("PAGE_Portofolio").setAttribute("style", "display: none");
@@ -129,13 +130,11 @@ function clearPage(){
     controls.enableRotate = false;
   })
 }
-
 function showPortofolio () {
   document.getElementById("PAGE_CV").setAttribute("style", "display: none");
   document.getElementById("PAGE_Portofolio").setAttribute("style", "display: block");
   document.getElementById("container").setAttribute("style", "position: relative;");
 }
-
 function showCV(){
   document.getElementById("PAGE_CV").setAttribute("style", "display: block");
   document.getElementById("PAGE_Portofolio").setAttribute("style", "display: none");
@@ -160,7 +159,6 @@ function showCV(){
   // .start()
   
 }
-
 function checkQuadrant(objectPosition){
   let number;
   if(objectPosition.x > 0 && objectPosition.z > 0){
@@ -194,6 +192,9 @@ animate();
 
 
 
+// 
+// SCENE INTERACTION
+// 
 
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
