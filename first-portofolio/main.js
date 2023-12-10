@@ -70,7 +70,7 @@ loader.load(
     // })
     base.scale.set(7, 7, 7);
     base.position.setY(-1.5)
-    scene.add(base);
+    // scene.add(base);
   }
 )
 
