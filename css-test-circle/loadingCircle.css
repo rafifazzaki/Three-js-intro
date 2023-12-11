@@ -1,0 +1,56 @@
+body {
+  padding: 0;
+  margin: 0;
+  min-height: 500vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container.first{
+  position: fixed;
+  top: 50%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+
+.container.second{
+  position: fixed;
+  top: 40%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+
+.container.third{
+  position: fixed;
+  top: 30%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+.circle-scrolling {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 2em;
+  height: 2em;
+  border: .2em solid white;
+  border-radius: 3em;
+  background: linear-gradient(white 50%, rgba(255, 255, 255, 0) 50%);
+  background-size: 100% 200%; /* Initial size, twice the height */
+
+  animation: filling 1s linear; /* infinite */
+  animation-play-state: paused;
+  /* animation-timing-function: linear; */
+  animation-delay: calc(var(--scroll) * -1s);
+}
+
+@keyframes filling {
+  0% {
+    background-position: 0 100%; /* Start from the bottom */
+  }
+  100% {
+    background-position: 0 0; /* Fully filled at the top */
+  }
+}

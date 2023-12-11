@@ -57,6 +57,13 @@ const boxBody = new CANNON.Body({
 boxBody.position.set(1, 10, 0);
 physicsWorld.addBody(boxBody);
 
+const shape = CANNON.Trimesh.createTorus(50, 3, 4, 8);
+const body = new CANNON.Body({ mass: 20 });
+body.addShape(shape);
+body.position.set(0, 1, 0)
+body.quaternion.setFromEuler(-Math.PI/2, 0, 0)
+physicsWorld.addBody(body)
+
 // 
 // // Geometry: three js
 // 
