@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrolling Circles</title>
+  <style>
+    body {
+      height: 200vh; /* Make the body taller to enable scrolling */
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circle-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: lightgray;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="circle-container">
+  <div class="circle" id="circle1"></div>
+  <div class="circle" id="circle2"></div>
+  <div class="circle" id="circle3"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const circles = document.querySelectorAll('.circle');
+
+    function fillCircles() {
+      circles.forEach((circle, index) => {
+        const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        const fillPercentage = Math.min(scrollPercentage - index * 30, 100); // Adjust the value to control the fill rate
+
+        circle.style.backgroundColor = `hsl(200, 100%, ${fillPercentage}%)`;
+      });
+    }
+
+    // Update circles on scroll
+    window.addEventListener('scroll', fillCircles);
+
+    // Initial fill on page load
+    fillCircles();
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+/* chatGPT */
+
+body {
+    height: 200vh; /* Make the body taller to enable scrolling */
+    margin: 0;
+    /* display: flex; */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .circle-container {
+    position: fixed;
+      top: 50%;
+      right: 20px; /* Adjust the right margin to center a bit */
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column; /* Align circles vertically */
+      align-items: flex-start; /* Align circles to the left */
+  }
+
+  .circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid;
+    background-color: lightgray;
+    margin: 10px;
+  }

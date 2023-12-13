@@ -1,0 +1,49 @@
+/* body{
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  background-color: #34495e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+.scroll-icon{
+  position: relative;
+  width: 2em;
+  height: 4em;
+  border: .3em solid #fff;
+  border-radius: 2em;
+  margin: 2em;
+
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.scroll-icon.ex-1 .wheel{
+  position: absolute;
+  width: .6em;
+  height: .6em;
+  background-color: #fff;
+  left: 50%;
+  top: 15%;
+  /* transform: translate(-50%, 0); */
+  border-radius: .6em;
+  animation: ex-1-wheel 1s ease-in-out infinite;
+}
+
+@keyframes ex-1-wheel {
+  0%{
+    transform: translate(-50%, 0);
+    opacity: 0;
+  }
+  20%, 70%{
+    opacity: 1;
+  }
+  100%{
+    transform: translate(-50%, 150%);
+    opacity: 0;
+  }
+
+}

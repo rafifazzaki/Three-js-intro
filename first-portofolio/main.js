@@ -1,4 +1,7 @@
 import './style.css'
+import './scroll.css'
+import './mouse-icon.css'
+
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
@@ -26,7 +29,7 @@ renderer.render(scene, camera);
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.enablePan = false;
-// controls.enableZoom = false;
+controls.enableZoom = false;
 controls.enableDamping = true
 controls.minPolarAngle = Math.PI/8; // radians
 controls.maxPolarAngle = Math.PI/2; 
@@ -287,115 +290,15 @@ function checkQuadrant(objectPosition){
 // SCENE INTERACTION
 // 
 
-let raycaster = new THREE.Raycaster();
-let mouse = new THREE.Vector2();
-let INTERSECTED;
-renderer.domElement.addEventListener('mousemove', onPointerMove, false) //pointermove
-window.addEventListener('resize', onWindowResize);
-renderer.domElement.addEventListener('click', onPointerClick, false)
-// renderer.domElement.addEventListener('',)
-
-
 function onWindowResize(){
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
+window.addEventListener('resize', onWindowResize);
 
-function onPointerMove(event){
-  mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-  mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObject(scene, true);
 
-  if ( intersects.length > 0 ) {
-
-    if ( INTERSECTED != intersects[ 0 ].object ) {
-
-      if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
-
-      INTERSECTED = intersects[ 0 ].object;
-      INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-      switch(INTERSECTED.name) {
-        case "button1":
-          GLOW();
-          break;
-        case "button2":
-          GLOW();
-          break;
-        case "button3":
-          GLOW();
-          break;
-        case "button4":
-          GLOW();
-          break;
-        case "button5":
-          GLOW();
-          break;
-        case "button6":
-          GLOW();
-          break;
-        
-        default:
-          // code block
-      }
-      
-      // INTERSECTED.material.color.setHex( 0xff0000 );
-
-    }
-
-  } else {
-
-    if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
-
-    INTERSECTED = null;
-
-  }
-  function GLOW(){
-    // INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-    INTERSECTED.material.color.setHex( 0xff0000 );
-  }
-}
-
-function onPointerClick( event ) {
-  mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-  mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObject(scene, true);
-
-  if(intersects.length > 0){
-    
-    switch(intersects[ 0 ].object.name) {
-      case "button1":
-        CONTENT_button1();
-        break;
-      case "button2":
-        CONTENT_button1();
-        break;
-      case "button3":
-        CONTENT_button1();
-        break;
-      case "button4":
-        CONTENT_button1();
-        break;
-      case "button5":
-        CONTENT_button1();
-        break;
-      case "button6":
-        CONTENT_button1();
-        break;
-      
-      default:
-        // code block
-    }
-  }
-
-  function CONTENT_button1(){
-    console.log("asdasd");
-  }
-
-}
 
 
 function animate(){
@@ -433,3 +336,24 @@ function animate(){
 }
 
 animate();
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const circles = document.querySelectorAll('.circle');
+
+  function fillCircles() {
+    circles.forEach((circle, index) => {
+      const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      const fillPercentage = Math.min(scrollPercentage - index * 30, 100); // Adjust the value to control the fill rate
+
+      // circle.style.backgroundColor = `hsl(200, 100%, ${fillPercentage}%)`;
+      circle.style.backgroundColor = `rgba(255, 255, 255, ${fillPercentage / 20})`;
+    });
+  }
+
+  // Update circles on scroll
+  window.addEventListener('scroll', fillCircles);
+
+  // Initial fill on page load
+  fillCircles();
+});
