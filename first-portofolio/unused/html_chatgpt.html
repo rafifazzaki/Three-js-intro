@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrolling Circles</title>
+  <style>
+    body {
+      height: 200vh; /* Make the body taller to enable scrolling */
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circle-container {
+      position: fixed;
+      top: 50%;
+      right: 20px; /* Adjust the right margin to center a bit */
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column; /* Align circles vertically */
+      align-items: flex-start; /* Align circles to the left */
+    }
+
+    .circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: transparent;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="circle-container">
+  <div class="circle" id="circle1"></div>
+  <div class="circle" id="circle2"></div>
+  <div class="circle" id="circle3"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const circles = document.querySelectorAll('.circle');
+
+    function fillCircles() {
+      circles.forEach((circle, index) => {
+        const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        const fillPercentage = Math.min(scrollPercentage - index * 30, 100); // Adjust the value to control the fill rate
+
+        // Set the background color to white with the calculated opacity
+        circle.style.backgroundColor = `rgba(255, 255, 255, ${fillPercentage / 100})`;
+
+        // Call customFunction when scrolling is 30% or more
+        if (scrollPercentage >= 30) {
+          customFunction();
+        }
+      });
+    }
+
+    // Update circles on scroll
+    window.addEventListener('scroll', fillCircles);
+
+    // Initial fill on page load
+    fillCircles();
+
+    // Custom function to be called when scrolling is 30% or more
+    function customFunction() {
+      console.log('Custom function called at 30% scrolling!');
+      // Add your custom logic here
+    }
+  });
+</script>
+
+</body>
+</html>
