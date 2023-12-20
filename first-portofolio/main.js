@@ -2,10 +2,13 @@ import './style.css'
 import './scroll.css'
 import './mouse-icon.css'
 
+// import './page.js'
+import './content.js'
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 import CannonDebugger from 'cannon-es-debugger';
+import { DragControls } from 'three/addons/controls/DragControls.js';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { degToRad } from 'three/src/math/MathUtils';
@@ -34,6 +37,8 @@ controls.enableDamping = true
 controls.minPolarAngle = Math.PI/8; // radians
 controls.maxPolarAngle = Math.PI/2; 
 scene.add(controls)
+
+
 
 
 function onWindowResize(){
@@ -85,7 +90,7 @@ const sphereBody2 = new CANNON.Body({
   mass: 5,
   shape: new CANNON.Sphere(radius)
 })
-sphereBody.position.set(0, 7, 2)
+sphereBody2.position.set(0, 7, 2)
 // physicsWorld.addBody(sphereBody2)
 
 const boxBody = new CANNON.Body({
@@ -99,7 +104,7 @@ const boxBody2 = new CANNON.Body({
   mass: 5,
   shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1))
 })
-boxBody.position.set(1, 10, 1)
+boxBody2.position.set(1, 10, 1)
 // physicsWorld.addBody(boxBody2)
 
 var CYLINDER_HEIGHT = 5
@@ -121,7 +126,6 @@ longBoxBody.position.set(0, 13, 0)
 // // THREE JS GEOMETRY
 // 
 
-// FLAG_three object
 const sphereGeo = new THREE.SphereGeometry(radius)
 
 const sphereMat = new THREE.MeshBasicMaterial({color:0xE58943}); //0x818589
@@ -129,32 +133,32 @@ const sphere = new THREE.Mesh(sphereGeo, sphereMat)
 
 const sphereMat2 = new THREE.MeshBasicMaterial({color:0xE58943}); //0x818589
 const sphere2 = new THREE.Mesh(sphereGeo, sphereMat2)
-// scene.add(sphere);
-// scene.add(sphere2);
+sphere.name = 'sphere';
+sphere2.name = 'sphere2';
 
 const box = new THREE.Mesh(
   new THREE.BoxGeometry(2, 2, 2),
   new THREE.MeshBasicMaterial()
 )
-// scene.add(box)
+box.name = 'box'
 
 const box2 = new THREE.Mesh(
   new THREE.BoxGeometry(2, 2, 2),
   new THREE.MeshBasicMaterial()
 )
-// scene.add(box2)
+box2.name = 'box2'
 
 const cone = new THREE.Mesh(
   new THREE.ConeGeometry(3, 5, 4),
   new THREE.MeshBasicMaterial()
 )
-// scene.add(cone)
+cone.name = 'cone';
 
 const longBox = new THREE.Mesh(
   new THREE.BoxGeometry(4, 0.4, 4),
   new THREE.MeshBasicMaterial()
 )
-// scene.add(longBox)
+longBox.name = 'longBox';
 
 
 // const light = new THREE.AmbientLight(0xffffff, 10)
@@ -196,7 +200,105 @@ scene.add(plane)
 
 
 
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2();
+let INTERSECTED;
+renderer.domElement.addEventListener('mousemove', onPointerMove, false) //pointermove
 
+renderer.domElement.addEventListener('click', onPointerClick, false)
+
+function onPointerClick( event ) {
+  mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+  mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObject(scene, true);
+  if(intersects.length > 0){
+    console.log(intersects[ 0 ].object); //
+    switch(intersects[ 0 ].object.name) {
+      case "box":
+        CONTENT_button1("box");
+        break;
+      case "box2":
+        CONTENT_button1("box2");
+        break;
+      case "sphere":
+        CONTENT_button1("sphere");
+        break;
+      case "sphere2":
+        CONTENT_button1("sphere2");
+        break;
+      case "cone":
+        CONTENT_button1("cone");
+        break;
+      case "longbox":
+        CONTENT_button1("longbox");
+        break;
+      
+      default:
+        // code block
+    }
+  }
+
+  function CONTENT_button1(string){
+    console.log(string);
+    
+  }
+}
+
+function onPointerMove(event){
+  mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+  mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObject(scene, true);
+  if ( intersects.length > 0 ) {
+    
+    if ( INTERSECTED != intersects[ 0 ].object ) {
+      // console.log(INTERSECTED);
+      if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+
+      INTERSECTED = intersects[ 0 ].object;
+      INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+      switch(INTERSECTED.name) {
+        case "box":
+          GLOW();
+          break;
+        case "box2":
+          GLOW();
+          break;
+        case "sphere":
+          GLOW();
+          break;
+        case "sphere2":
+          GLOW();
+          break;
+        case "cone":
+          GLOW();
+          break;
+        case "longBox":
+          GLOW();
+          break;
+        
+        default:
+          // code block
+      }
+      
+      // INTERSECTED.material.color.setHex( 0xff0000 );
+
+    }
+
+  } else {
+
+    if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+
+    INTERSECTED = null;
+
+  }
+  function GLOW(){
+    // INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+    
+    INTERSECTED.material.color.setHex( 0xff0000 );
+  }
+}
 
 
 function animate(){
@@ -240,6 +342,33 @@ animate();
 // scroll listener
 // 
 
+function instantiateObject(){
+  physicsWorld.addBody(sphereBody)
+  scene.add(sphere);
+  sphere.visible = false;
+  
+  physicsWorld.addBody(sphereBody2)
+  scene.add(sphere2);
+  sphere2.visible = false;
+  
+  physicsWorld.addBody(boxBody)
+  scene.add(box)
+  box.visible = false;
+  
+  physicsWorld.addBody(boxBody2)
+  scene.add(box2)
+  box2.visible = false;
+  
+  physicsWorld.addBody(coneBody)
+  scene.add(cone)
+  cone.visible = false;
+  
+  physicsWorld.addBody(longBoxBody)
+  scene.add(longBox)
+  }
+  
+instantiateObject()
+
 document.addEventListener('DOMContentLoaded', function () {
   const circles = document.querySelectorAll('.circle');
 
@@ -251,69 +380,63 @@ document.addEventListener('DOMContentLoaded', function () {
       // circle.style.backgroundColor = `hsl(200, 100%, ${fillPercentage}%)`;
       circle.style.backgroundColor = `rgba(255, 255, 255, ${fillPercentage / 20})`;
 
-      let switcher1, switcher2, switcher3, switcher4, switcher5, switcher6
-      switcher1 = switcher2 = switcher3 = switcher4 = switcher5 = switcher6 = false;
-
-      switcher1 = true;
-      if (scrollPercentage >= 15 && scrollPercentage < 30) {
-        physicsWorld.addBody(sphereBody)
-        scene.add(sphere);
-        // console.log("1");
-        // stopper1 = true
-        // switcher1 = true;
+      if (scrollPercentage >= 15) {
+        sphere.visible = true;
+        
       }else{
-        physicsWorld.removeBody(sphereBody)
-        scene.remove(sphere)
+        sphereBody.position.set(2, 7, 0)
+        sphere.visible = false;
       }
-       if(scrollPercentage >= 30){
-        physicsWorld.addBody(sphereBody2)
-        scene.add(sphere2);
+
+      if(scrollPercentage >= 30){
+        sphere2.visible = true;
+        
       } else {
-        physicsWorld.removeBody(sphereBody2)
-        scene.remove(sphere2)
+        sphereBody2.position.set(0, 7, 2)
+        sphere2.visible = false;
       }
 
       if(scrollPercentage >= 45){
-        physicsWorld.addBody(boxBody)
-        scene.add(box)
+        box.visible = true;
       } 
       else{
-        physicsWorld.removeBody(boxBody)
-        scene.remove(box)
+        boxBody.position.set(1, 10, 1)
+        box.visible = false;
       }
+
       if(scrollPercentage >= 60){
-        physicsWorld.addBody(boxBody2)
-        scene.add(box2)
+        box2.visible = true;
       } 
-      else if(switcher1 = true){
-        physicsWorld.removeBody(boxBody2)
-        scene.remove(box2)
+      else{
+        boxBody2.position.set(1, 10, 1)
+        box2.visible = false;
       }
+
       if(scrollPercentage >= 75){
-        physicsWorld.addBody(coneBody)
-        scene.add(cone)
+        cone.visible = true;
       }else{
-        physicsWorld.removeBody(coneBody)
-        scene.remove(cone)
+        coneBody.position.set(0, 13, 0)
+        cone.visible = false;
       }
 
       if(scrollPercentage >= 90){
-        physicsWorld.addBody(longBoxBody)
-        scene.add(longBox)
+        longBox.visible = true;
       }else{
-        physicsWorld.removeBody(longBoxBody)
-        scene.remove(longBox)
-        // switcher1 = false
+        longBoxBody.position.set(0, 15, 0)
+        longBox.visible = false;
       }
 
+
+
+      // CheckAllObjectOnScene();
+      function CheckAllObjectOnScene(){
       console.clear();
       scene.traverse( function( object ) {
         
         if(object instanceof THREE.Mesh){
           console.log(object)
+      }});
       }
-      
-      } );
 
     });
   }
