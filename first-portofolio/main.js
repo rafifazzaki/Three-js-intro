@@ -216,22 +216,53 @@ function onPointerClick( event ) {
     console.log(intersects[ 0 ].object); //
     switch(intersects[ 0 ].object.name) {
       case "box":
-        CONTENT_button1("box");
+        var title = 'Zettacamp’s Assignment API'
+        var text  = 'Making REST APIs using Express.js and MongoDB and. and testing using Cypress, and Postman. In addition, learn other materials such as training logic and GIT. Learning starts from basic HTML, CSS, and javascript'
+        var github = 'https://www.google.com/'
+        var external = 'https://www.google.com/'
+
+        changeContent(title, text, github, external)
+
         break;
       case "box2":
-        CONTENT_button1("box2");
+
+        var title = 'Dicoding’s API & EC2 Deploy Assignments'
+        var text  = 'Build a fully working API with Node.js and HAPI.js. and deploying note-taking app’s backend to the Amazon EC2 Instance'
+        var github = 'https://www.google.com/'
+        var external = 'https://www.google.com/'
+
+        changeContent(title, text, github, external)
         break;
       case "sphere":
-        CONTENT_button1("sphere");
+
+        var title = 'Prototype \"Finitra\" (Capslock team)'
+        var text  = 'Prototype game \"Finitra\" is a game that was proposed at Game Development Competition Find IT 2018 organized by KMTETI Universitas Gadjah Mada.'
+        var github = 'https://www.google.com/'
+        var external = 'https://www.google.com/'
+
+        changeContent(title, text, github, external)
         break;
       case "sphere2":
-        CONTENT_button1("sphere2");
+
+        var title = 'COMPFEST 12 2020 - Postman (Large Iced Tea)'
+        var text  = 'Compfest 12 Indie Game Ignite which was organized by Mahasiswa Fakultas Ilmu Komputer Universitas Indonesia. with Large Iced Tea team, we produce a game \"Postman\"'
+        var github = 'https://www.google.com/'
+        var external = 'https://www.google.com/'
+        changeContent(title, text, github, external)
         break;
       case "cone":
-        CONTENT_button1("cone");
+        var title = 'Robot Soccer Prototype'
+        var text  = 'Member of a team to build Robot Soccer Prototype made according to KRSBI 2018'
+        var github = 'https://www.google.com/'
+        var external = 'https://www.google.com/'
+        changeContent(title, text, github, external)
         break;
       case "longbox":
-        CONTENT_button1("longbox");
+        var title = 'Personal project: keypad 4v4'
+        var text  = 'aking a keypad 4x4 with encoder, personal project'
+        var github = 'https://www.google.com/'
+        var external = 'https://www.google.com/'
+        changeContent(title, text, github, external)
         break;
       
       default:
@@ -239,9 +270,24 @@ function onPointerClick( event ) {
     }
   }
 
-  function CONTENT_button1(string){
-    console.log(string);
-    
+  function changeContent(title, text, github, external) {
+
+        var id = "project-title"
+        var place = document.getElementById(`${id}`);
+        place.innerText = `${title}`;
+
+
+        id = "project-desc"
+        place = document.getElementById(`${id}`);
+        place.textContent = `${text}`;
+
+        id = "link-github"
+        place = document.getElementById(`${id}`);
+        place.href = `${github}`;
+
+        id = "link-external"
+        place = document.getElementById(`${id}`);
+        place.href = `${external}`;
   }
 }
 
@@ -339,7 +385,7 @@ animate();
 
 
 // 
-// scroll listener
+// // scroll listener
 // 
 
 function instantiateObject(){
@@ -366,8 +412,12 @@ function instantiateObject(){
   physicsWorld.addBody(longBoxBody)
   scene.add(longBox)
   }
-  
 instantiateObject()
+
+
+//
+// // Scroll listener
+//
 
 document.addEventListener('DOMContentLoaded', function () {
   const circles = document.querySelectorAll('.circle');
