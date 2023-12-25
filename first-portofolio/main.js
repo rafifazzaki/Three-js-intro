@@ -32,7 +32,7 @@ renderer.render(scene, camera);
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.enablePan = false;
-controls.enableZoom = false;
+// controls.enableZoom = false;
 controls.enableDamping = true
 controls.minPolarAngle = Math.PI/8; // radians
 controls.maxPolarAngle = Math.PI/2; 
@@ -84,28 +84,24 @@ const sphereBody = new CANNON.Body({
   shape: new CANNON.Sphere(radius)
 })
 sphereBody.position.set(2, 7, 0)
-// physicsWorld.addBody(sphereBody)
 
 const sphereBody2 = new CANNON.Body({
   mass: 5,
   shape: new CANNON.Sphere(radius)
 })
 sphereBody2.position.set(0, 7, 2)
-// physicsWorld.addBody(sphereBody2)
 
 const boxBody = new CANNON.Body({
   mass: 5,
   shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1))
 })
 boxBody.position.set(1, 10, 1)
-// physicsWorld.addBody(boxBody)
 
 const boxBody2 = new CANNON.Body({
   mass: 5,
   shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1))
 })
 boxBody2.position.set(1, 10, 1)
-// physicsWorld.addBody(boxBody2)
 
 var CYLINDER_HEIGHT = 5
 const coneBody = new CANNON.Body({
@@ -113,14 +109,12 @@ const coneBody = new CANNON.Body({
   shape: new CANNON.Cylinder(0.01, 3, CYLINDER_HEIGHT, 4, 1)
 })
 coneBody.position.set(0, 13, 0)
-// physicsWorld.addBody(coneBody)
 
 const longBoxBody = new CANNON.Body({
   mass: 5,
   shape: new CANNON.Box(new CANNON.Vec3(2, 0.2, 2))
 })
 longBoxBody.position.set(0, 13, 0)
-// physicsWorld.addBody(longBoxBody)
 
 // 
 // // THREE JS GEOMETRY
@@ -176,23 +170,88 @@ plane.position.setY(-1.5)
 plane.rotateX(degToRad(-90))
 scene.add(plane)
 
-// const loader = new GLTFLoader();
+const loader = new GLTFLoader();
+let keypad
 
-// loader.load(
-//   'base.glb',
-//   function(gltf){
-//     const base = gltf.scene
-//     // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
-//     // base.traverse((o) => {
-//     //   if(o.isMesh) o.material = newMaterial;
-//     // })
-//     base.scale.set(7, 7, 7);
-//     base.position.setY(-1.5)
-//     scene.add(base);
-//   }
-// )
+loader.load(
+  './obj/keypad.glb',
+  function(gltf){
+    keypad = gltf.scene
+    // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
+    // model.traverse((o) => {
+    //   if(o.isMesh) o.material = newMaterial;
+    // })
+    keypad.scale.set(.03, .03, .03);
+    keypad.position.setY(-1.5)
+    keypad.name = 'keypad'
+    scene.add(keypad);
+  }
+)
 
+var omni
 
+loader.load(
+  './obj/omnidirectional.glb',
+  function(gltf){
+    omni = gltf.scene
+    // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
+    // model.traverse((o) => {
+    //   if(o.isMesh) o.material = newMaterial;
+    // })
+    omni.scale.set(.1, .1, .1);
+    // omni.position.setY(5)
+    omni.name = 'omni'
+    scene.add(omni);
+  }
+)
+var controller
+loader.load(
+  './obj/game_controller2.glb',
+  function(gltf){
+    controller = gltf.scene
+    // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
+    // model.traverse((o) => {
+    //   if(o.isMesh) o.material = newMaterial;
+    // })
+    controller.scale.set(1, 1, 1);
+    controller.position.setY(-1.5)
+    controller.name = 'controller'
+    scene.add(controller);
+  }
+)
+
+var keyboard
+
+loader.load(
+  './obj/mech_keyboard.glb',
+  function(gltf){
+    keyboard = gltf.scene
+    // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
+    // model.traverse((o) => {
+    //   if(o.isMesh) o.material = newMaterial;
+    // })
+    keyboard.scale.set(.01, .01, .01);
+    keyboard.position.setY(-1.5)
+    keyboard.name = 'keyboard'
+    scene.add(keyboard);
+  }
+)
+
+var marble1
+loader.load(
+  './obj/marble_test.glb',
+  function(gltf){
+    marble1 = gltf.scene
+    // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
+    // model.traverse((o) => {
+    //   if(o.isMesh) o.material = newMaterial;
+    // })
+    marble1.scale.set(1, 1, 1);
+    marble1.position.setY(-1.5)
+    marble1.name = 'marble1'
+    scene.add(marble1);
+  }
+)
 
 // 
 // SCENE INTERACTION
@@ -347,45 +406,9 @@ function onPointerMove(event){
 }
 
 
-function animate(){
-  physicsWorld.fixedStep()
-  cannonDebugger.update()
-  requestAnimationFrame(animate)
-
-
-  sphere.position.copy(sphereBody.position)
-  sphere.quaternion.copy(sphereBody.quaternion)
-
-  sphere2.position.copy(sphereBody2.position)
-  sphere2.quaternion.copy(sphereBody2.quaternion)
-
-
-  box.position.copy(boxBody.position)
-  box.quaternion.copy(boxBody.quaternion)
-
-  box2.position.copy(boxBody2.position)
-  box2.quaternion.copy(boxBody2.quaternion)
-
-
-  cone.position.copy(coneBody.position)
-  cone.quaternion.copy(coneBody.quaternion)
-
-  longBox.position.copy(longBoxBody.position)
-  longBox.quaternion.copy(longBoxBody.quaternion)
-
-
-
-// three
-  controls.update();
-  TWEEN.update()
-  renderer.render(scene, camera);
-}
-
-animate();
-
 
 // 
-// // scroll listener
+// // instantiate object
 // 
 
 function instantiateObject(){
@@ -497,3 +520,44 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initial fill on page load
   fillCircles();
 });
+
+
+// 
+// // Three js update
+// 
+
+function animate(){
+  physicsWorld.fixedStep()
+  cannonDebugger.update()
+  requestAnimationFrame(animate)
+
+
+  marble1.position.copy(sphereBody.position)
+  marble1.quaternion.copy(sphereBody.quaternion)
+
+  sphere2.position.copy(sphereBody2.position)
+  sphere2.quaternion.copy(sphereBody2.quaternion)
+
+
+  controller.position.copy(boxBody.position)
+  controller.quaternion.copy(boxBody.quaternion)
+
+  keyboard.position.copy(boxBody2.position)
+  keyboard.quaternion.copy(boxBody2.quaternion)
+
+
+  // omni.position.copy(coneBody.position)
+  omni.position.set(coneBody.position.x-2, coneBody.position.y+2, coneBody.position.z-3.5)
+  omni.quaternion.copy(coneBody.quaternion)
+
+  keypad.position.copy(longBoxBody.position)
+  keypad.quaternion.copy(longBoxBody.quaternion)
+
+
+
+// three
+  controls.update();
+  TWEEN.update()
+  renderer.render(scene, camera);
+}
+animate();
