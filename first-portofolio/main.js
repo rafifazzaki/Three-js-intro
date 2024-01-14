@@ -72,6 +72,7 @@ const cannonDebugger = new CannonDebugger(scene, physicsWorld)
 // // CANNON JS BODY
 // 
 const shape = CANNON.Trimesh.createTorus(50, 3, 4, 8);
+// const shape = new CANNON.Cylinder(10, 10, 10, 10)
 const body = new CANNON.Body({ mass: 1000 });
 body.addShape(shape);
 body.position.set(0, 1.5, 0)
@@ -161,7 +162,7 @@ longBox.name = 'longBox';
 
 // const lightAmbient = new THREE.AmbientLight(0xffffff, 10)
 // scene.add(lightAmbient)
-const light = new THREE.PointLight(0xffffff, 20)
+const light = new THREE.PointLight(0xffffff, 100) //10
 const lightHelper = new THREE.PointLightHelper(light)
 light.position.setY(5)
 scene.add(light, lightHelper)
@@ -590,7 +591,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function animate(){
   physicsWorld.fixedStep()
-  // cannonDebugger.update()
+  // cannonDebugger.update() //for checking rendered body
   requestAnimationFrame(animate)
 
 
