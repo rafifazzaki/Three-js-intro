@@ -32,7 +32,7 @@ renderer.render(scene, camera);
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.enablePan = false;
-// controls.enableZoom = false;
+controls.enableZoom = false;
 controls.enableDamping = true
 controls.minPolarAngle = Math.PI/8; // radians
 controls.maxPolarAngle = Math.PI/2; 
@@ -83,7 +83,7 @@ const sphereBody = new CANNON.Body({
   mass: 5,
   shape: new CANNON.Sphere(radius)
 })
-sphereBody.position.set(2, 7, 0)
+sphereBody.position.set(2, 2, 0) //y=7
 
 const sphereBody2 = new CANNON.Body({
   mass: 5,
@@ -93,22 +93,26 @@ sphereBody2.position.set(0, 7, 2)
 
 const boxBody = new CANNON.Body({
   mass: 5,
-  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1))
+  shape: new CANNON.Box(new CANNON.Vec3(3.7, .5, 1.5))
 })
 boxBody.position.set(1, 10, 1)
 
 const boxBody2 = new CANNON.Body({
   mass: 5,
-  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1))
+  shape: new CANNON.Box(new CANNON.Vec3(4.9, .5, 2))
 })
 boxBody2.position.set(1, 10, 1)
 
-var CYLINDER_HEIGHT = 5
+var CYLINDER_HEIGHT = 10
 const coneBody = new CANNON.Body({
   mass: 5,
-  shape: new CANNON.Cylinder(0.01, 3, CYLINDER_HEIGHT, 4, 1)
+  shape: new CANNON.Cylinder(0.01, 6, CYLINDER_HEIGHT, 4, 1) // new CANNON.Cylinder(0.01, 3, CYLINDER_HEIGHT, 4, 1)
 })
 coneBody.position.set(0, 13, 0)
+
+
+
+// coneBody.scale.x = 0.005
 
 const longBoxBody = new CANNON.Body({
   mass: 5,
@@ -155,7 +159,8 @@ const longBox = new THREE.Mesh(
 longBox.name = 'longBox';
 
 
-// const light = new THREE.AmbientLight(0xffffff, 10)
+// const lightAmbient = new THREE.AmbientLight(0xffffff, 10)
+// scene.add(lightAmbient)
 const light = new THREE.PointLight(0xffffff, 20)
 const lightHelper = new THREE.PointLightHelper(light)
 light.position.setY(5)
@@ -172,7 +177,6 @@ scene.add(plane)
 
 const loader = new GLTFLoader();
 let keypad
-
 loader.load(
   './obj/keypad.glb',
   function(gltf){
@@ -183,13 +187,21 @@ loader.load(
     // })
     keypad.scale.set(.03, .03, .03);
     keypad.position.setY(-1.5)
+
+
     keypad.name = 'keypad'
     scene.add(keypad);
+
+    keypad.traverse((child) => {
+      if (child.isMesh) child.name = 'keypad'; // a material i created in the code earlier
+    });
+    keypad.name = 'keypad'
+    keypad.name = 'keypad'
+
+    keypad.visible = false
   }
 )
-
-var omni
-
+var omni, omniGroup
 loader.load(
   './obj/omnidirectional.glb',
   function(gltf){
@@ -199,12 +211,25 @@ loader.load(
     //   if(o.isMesh) o.material = newMaterial;
     // })
     omni.scale.set(.1, .1, .1);
-    // omni.position.setY(5)
+    omni.position.set(-.5, -2.7, .5)
+    omni.rotation.set(0, 0, 0)
+
+    
+    // scene.add(omni);
+
+    omniGroup = new THREE.Group();
+    omniGroup.add(omni)
+    scene.add(omniGroup);
+    omni.traverse((child) => {
+      if (child.isMesh) child.name = 'omni'; // a material i created in the code earlier
+    });
     omni.name = 'omni'
-    scene.add(omni);
+    omniGroup.name = 'omni'
+    omniGroup.visible = false
+
   }
 )
-var controller
+var controller, controllerGroup
 loader.load(
   './obj/game_controller2.glb',
   function(gltf){
@@ -214,14 +239,24 @@ loader.load(
     //   if(o.isMesh) o.material = newMaterial;
     // })
     controller.scale.set(1, 1, 1);
-    controller.position.setY(-1.5)
+    controller.position.set(-2.5, -1.5, 1.5)
     controller.name = 'controller'
-    scene.add(controller);
+    // scene.add(controller);
+
+    controllerGroup = new THREE.Group();
+    controllerGroup.add(controller)
+    scene.add(controllerGroup);
+
+    controller.traverse((child) => {
+      if (child.isMesh) child.name = 'controller'; // a material i created in the code earlier
+    });
+    controller.name = 'controller'
+    controllerGroup.name = 'controller'
+
+    controllerGroup.visible = false
   }
 )
-
-var keyboard
-
+var keyboardGroup, keyboard
 loader.load(
   './obj/mech_keyboard.glb',
   function(gltf){
@@ -231,13 +266,24 @@ loader.load(
     //   if(o.isMesh) o.material = newMaterial;
     // })
     keyboard.scale.set(.01, .01, .01);
-    keyboard.position.setY(-1.5)
+    // keyboard.position.setY(-2)
+    keyboard.position.set(-3.2, -1.5, 0)
     keyboard.name = 'keyboard'
-    scene.add(keyboard);
+
+    keyboardGroup = new THREE.Group();
+    keyboardGroup.add(keyboard)
+    scene.add(keyboardGroup);
+
+    keyboard.traverse((child) => {
+      if (child.isMesh) child.name = 'keyboard'; // a material i created in the code earlier
+    });
+    keyboard.name = 'keyboard'
+    keyboardGroup.name = 'keyboard'
+
+    keyboardGroup.visible = false
   }
 )
-
-var marble1
+var marble1, marble1Group
 loader.load(
   './obj/marble_test.glb',
   function(gltf){
@@ -247,11 +293,25 @@ loader.load(
     //   if(o.isMesh) o.material = newMaterial;
     // })
     marble1.scale.set(1, 1, 1);
-    marble1.position.setY(-1.5)
+    marble1.position.set(-3.7, -1, 0)
     marble1.name = 'marble1'
-    scene.add(marble1);
+    // scene.add(marble1);
+
+    marble1Group = new THREE.Group();
+    marble1Group.add(marble1)
+    scene.add(marble1Group);
+
+    marble1.traverse((child) => {
+      if (child.isMesh) child.name = 'marble1'; // a material i created in the code earlier
+    });
+    marble1.name = 'marble1'
+    marble1Group.name = 'marble1'
+
+    marble1Group.visible = false;
   }
 )
+
+
 
 // 
 // SCENE INTERACTION
@@ -274,7 +334,7 @@ function onPointerClick( event ) {
   if(intersects.length > 0){
     console.log(intersects[ 0 ].object); //
     switch(intersects[ 0 ].object.name) {
-      case "box":
+      case "sphere2": //box
         var title = 'Zettacamp’s Assignment API'
         var text  = 'Making REST APIs using Express.js and MongoDB and. and testing using Cypress, and Postman. In addition, learn other materials such as training logic and GIT. Learning starts from basic HTML, CSS, and javascript'
         var github = 'https://www.google.com/'
@@ -283,7 +343,7 @@ function onPointerClick( event ) {
         changeContent(title, text, github, external)
 
         break;
-      case "box2":
+      case "marble1": //box2
 
         var title = 'Dicoding’s API & EC2 Deploy Assignments'
         var text  = 'Build a fully working API with Node.js and HAPI.js. and deploying note-taking app’s backend to the Amazon EC2 Instance'
@@ -292,7 +352,7 @@ function onPointerClick( event ) {
 
         changeContent(title, text, github, external)
         break;
-      case "sphere":
+      case "keyboard": //sphere
 
         var title = 'Prototype \"Finitra\" (Capslock team)'
         var text  = 'Prototype game \"Finitra\" is a game that was proposed at Game Development Competition Find IT 2018 organized by KMTETI Universitas Gadjah Mada.'
@@ -301,7 +361,7 @@ function onPointerClick( event ) {
 
         changeContent(title, text, github, external)
         break;
-      case "sphere2":
+      case "controller": //sphere2
 
         var title = 'COMPFEST 12 2020 - Postman (Large Iced Tea)'
         var text  = 'Compfest 12 Indie Game Ignite which was organized by Mahasiswa Fakultas Ilmu Komputer Universitas Indonesia. with Large Iced Tea team, we produce a game \"Postman\"'
@@ -309,14 +369,14 @@ function onPointerClick( event ) {
         var external = 'https://www.google.com/'
         changeContent(title, text, github, external)
         break;
-      case "cone":
+      case "omni": //cone
         var title = 'Robot Soccer Prototype'
         var text  = 'Member of a team to build Robot Soccer Prototype made according to KRSBI 2018'
         var github = 'https://www.google.com/'
         var external = 'https://www.google.com/'
         changeContent(title, text, github, external)
         break;
-      case "longbox":
+      case "keypad": //longbox
         var title = 'Personal project: keypad 4v4'
         var text  = 'aking a keypad 4x4 with encoder, personal project'
         var github = 'https://www.google.com/'
@@ -364,22 +424,22 @@ function onPointerMove(event){
       INTERSECTED = intersects[ 0 ].object;
       INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
       switch(INTERSECTED.name) {
-        case "box":
-          GLOW();
-          break;
-        case "box2":
-          GLOW();
-          break;
-        case "sphere":
-          GLOW();
-          break;
         case "sphere2":
           GLOW();
           break;
-        case "cone":
+        case "marble1":
           GLOW();
           break;
-        case "longBox":
+        case "keyboard":
+          GLOW();
+          break;
+        case "controller":
+          GLOW();
+          break;
+        case "omni":
+          GLOW();
+          break;
+        case "keypad":
           GLOW();
           break;
         
@@ -388,12 +448,17 @@ function onPointerMove(event){
       }
       
       // INTERSECTED.material.color.setHex( 0xff0000 );
+      
 
     }
 
   } else {
 
-    if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+    // if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+
+    if ( INTERSECTED ){
+      INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+    } 
 
     INTERSECTED = null;
 
@@ -401,7 +466,10 @@ function onPointerMove(event){
   function GLOW(){
     // INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
     
-    INTERSECTED.material.color.setHex( 0xff0000 );
+    // INTERSECTED.material.color.setHex( 0xff0000 );
+    INTERSECTED.traverse((o) => {
+      if(o.isMesh) o.material.color.setHex( 0xff0000 )
+    })
   }
 }
 
@@ -411,31 +479,25 @@ function onPointerMove(event){
 // // instantiate object
 // 
 
-function instantiateObject(){
-  physicsWorld.addBody(sphereBody)
-  scene.add(sphere);
-  sphere.visible = false;
-  
-  physicsWorld.addBody(sphereBody2)
+function instantiateBodyObject(){
+  // scene.add(sphere);
   scene.add(sphere2);
-  sphere2.visible = false;
-  
-  physicsWorld.addBody(boxBody)
-  scene.add(box)
-  box.visible = false;
-  
+  // scene.add(box)
+  // scene.add(box2)
+  // scene.add(cone)
+  // scene.add(longBox)
+  // coneBody.scale.x = 0.005
+
+  physicsWorld.addBody(sphereBody)
+  physicsWorld.addBody(sphereBody2)
+  physicsWorld.addBody(boxBody)  
   physicsWorld.addBody(boxBody2)
-  scene.add(box2)
-  box2.visible = false;
-  
   physicsWorld.addBody(coneBody)
-  scene.add(cone)
-  cone.visible = false;
   
   physicsWorld.addBody(longBoxBody)
-  scene.add(longBox)
+  
   }
-instantiateObject()
+instantiateBodyObject()
 
 
 //
@@ -454,11 +516,11 @@ document.addEventListener('DOMContentLoaded', function () {
       circle.style.backgroundColor = `rgba(255, 255, 255, ${fillPercentage / 20})`;
 
       if (scrollPercentage >= 15) {
-        sphere.visible = true;
+        marble1Group.visible = true;
         
       }else{
         sphereBody.position.set(2, 7, 0)
-        sphere.visible = false;
+        marble1Group.visible = false;
       }
 
       if(scrollPercentage >= 30){
@@ -470,46 +532,46 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       if(scrollPercentage >= 45){
-        box.visible = true;
+        controllerGroup.visible = true
       } 
       else{
         boxBody.position.set(1, 10, 1)
-        box.visible = false;
+        controllerGroup.visible = false
       }
 
       if(scrollPercentage >= 60){
-        box2.visible = true;
+        keyboardGroup.visible = true
       } 
       else{
         boxBody2.position.set(1, 10, 1)
-        box2.visible = false;
+        keyboardGroup.visible = false
       }
 
       if(scrollPercentage >= 75){
-        cone.visible = true;
+        omniGroup.visible = true
       }else{
         coneBody.position.set(0, 13, 0)
-        cone.visible = false;
+        omniGroup.visible = false
       }
 
       if(scrollPercentage >= 90){
-        longBox.visible = true;
+        keypad.visible = true
       }else{
         longBoxBody.position.set(0, 15, 0)
-        longBox.visible = false;
+        keypad.visible = false
       }
 
 
 
       // CheckAllObjectOnScene();
-      function CheckAllObjectOnScene(){
-      console.clear();
-      scene.traverse( function( object ) {
+      // function CheckAllObjectOnScene(){
+      // console.clear();
+      // scene.traverse( function( object ) {
         
-        if(object instanceof THREE.Mesh){
-          console.log(object)
-      }});
-      }
+      //   if(object instanceof THREE.Mesh){
+      //     console.log(object)
+      // }});
+      // }
 
     });
   }
@@ -528,27 +590,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function animate(){
   physicsWorld.fixedStep()
-  cannonDebugger.update()
+  // cannonDebugger.update()
   requestAnimationFrame(animate)
 
 
-  marble1.position.copy(sphereBody.position)
-  marble1.quaternion.copy(sphereBody.quaternion)
+  marble1Group.position.copy(sphereBody.position)
+  marble1Group.quaternion.copy(sphereBody.quaternion)
 
   sphere2.position.copy(sphereBody2.position)
   sphere2.quaternion.copy(sphereBody2.quaternion)
 
 
-  controller.position.copy(boxBody.position)
-  controller.quaternion.copy(boxBody.quaternion)
+  controllerGroup.position.copy(boxBody.position)
+  controllerGroup.quaternion.copy(boxBody.quaternion)
 
-  keyboard.position.copy(boxBody2.position)
-  keyboard.quaternion.copy(boxBody2.quaternion)
+  keyboardGroup.position.copy(boxBody2.position)
+  keyboardGroup.quaternion.copy(boxBody2.quaternion)
 
 
   // omni.position.copy(coneBody.position)
-  omni.position.set(coneBody.position.x-2, coneBody.position.y+2, coneBody.position.z-3.5)
-  omni.quaternion.copy(coneBody.quaternion)
+  omniGroup.position.set(coneBody.position.x, coneBody.position.y, coneBody.position.z) // x, y-.5, z+7
+  omniGroup.quaternion.copy(coneBody.quaternion)
 
   keypad.position.copy(longBoxBody.position)
   keypad.quaternion.copy(longBoxBody.quaternion)
