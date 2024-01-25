@@ -318,8 +318,6 @@ loader.load(
 // SCENE INTERACTION
 // 
 
-
-
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 let INTERSECTED;

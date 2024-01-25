@@ -24,11 +24,16 @@ canvas {
   
 }
 
+
+
 #PAGE_CV{
   font-size: larger;
   display: none;
   backdrop-filter: blur(10px);
-  animation: fadeIn 5s;
+}
+
+.fadeIn{
+  animation: fadeIn 3s;
 }
 
 @keyframes fadeIn {
@@ -52,11 +57,21 @@ canvas {
   width: 100%;
   margin: 2rem;
   margin-bottom: 1rem;
+  
 }
 
 #footer-desc{
   margin: 2rem;
   margin-right: 10rem;
+}
+
+.fadeOut{
+  animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeOut {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
 }
 
 .left{
@@ -66,8 +81,6 @@ canvas {
 .right{
   float: right;
 }
-
-
 
 
 

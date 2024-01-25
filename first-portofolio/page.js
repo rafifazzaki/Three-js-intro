@@ -11,28 +11,20 @@ cv_page.onclick = showCV;
 home_page.onclick = clearPage;
 back_button.onclick = goBackPage;
 
+
+const PAGE_CV = document.getElementById("PAGE_CV")
+const PAGE_Portofolio = document.getElementById("PAGE_Portofolio")
+const footer = document.getElementById("footer")
+var Toggle_CV = true
+
 function goBackPage(){
-  document.getElementById("PAGE_CV").setAttribute("style", "display: none");
-  document.getElementById("PAGE_Portofolio").setAttribute("style", "display: none");
-  document.getElementById("container").setAttribute("style", "position: static;");
-  
-  var t = new TWEEN.Tween(controls.target).to(
-    {
-      x: 0,
-      y: 0,
-      z: 0
-    }, 1000)
-    .easing(TWEEN.Easing.Quadratic.Out)
-    .start()
-    .onComplete(function(){
-      controls.enableRotate = true;
-    })
+
 }
 function clearPage(){
-  document.getElementById("PAGE_CV").setAttribute("style", "display: none");
-  document.getElementById("PAGE_Portofolio").setAttribute("style", "display: none");
-  document.getElementById("container").setAttribute("style", "position: static;");
-  
+  hideElement(PAGE_CV)
+  hideElement(PAGE_Portofolio)
+  showElement(footer)
+
   var t = new TWEEN.Tween(controls.target).to(
     {
       x: 0,
@@ -58,11 +50,20 @@ function showPortofolio () {
   document.getElementById("container").setAttribute("style", "position: relative;");
 }
 function showCV(){
-  document.getElementById("PAGE_CV").setAttribute("style", "display: block");
-  document.getElementById("PAGE_Portofolio").setAttribute("style", "display: none");
-  document.getElementById("container").setAttribute("style", "position: relative;");
-  controls.enableRotate = false;
+  if(Toggle_CV === true){
+    Toggle_CV = false
+    showElement(PAGE_CV)
+    hideElement(PAGE_Portofolio)
+    hideElement(footer)
+  }else{
+    Toggle_CV = true
+    hideElement(PAGE_CV)
+    hideElement(PAGE_Portofolio)
+    showElement(footer)
+  }
+  
 
+  controls.enableRotate = false;
 
   new TWEEN.Tween(controls.target).to({
     x: camera.position.x - 1 * checkQuadrant(camera.position).x,
@@ -81,6 +82,20 @@ function showCV(){
   // .start()
   
 }
+
+// fadeIn
+function showElement(element){
+  document.getElementById("container").setAttribute("style", "position: fixed;");
+  element.setAttribute("style", "display: block");
+  element.classList.remove("fadeOut");
+  element.classList.add("fadeIn");
+}
+// fadeOut
+function hideElement(element){
+  element.classList.add("fadeOut");
+}
+
+
 function checkQuadrant(objectPosition){
   let number;
   if(objectPosition.x > 0 && objectPosition.z > 0){
