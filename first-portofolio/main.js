@@ -16,9 +16,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import TWEEN, { Tween } from '@tweenjs/tween.js'
 
 
-// 
-// // INIT THREE JS & SETTING
-// 
+// #region INIT THREE JS & WINDOWS SETTING
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
@@ -38,9 +36,6 @@ controls.minPolarAngle = Math.PI/8; // radians
 controls.maxPolarAngle = Math.PI/2; 
 scene.add(controls)
 
-
-
-
 function onWindowResize(){
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -49,9 +44,13 @@ function onWindowResize(){
 }
 window.addEventListener('resize', onWindowResize);
 
-// 
-// // INIT CANNON JS
-// 
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+// #endregion
+
+// #region INIT CANNON JS
 
 const physicsWorld = new CANNON.World({
   gravity: new CANNON.Vec3(0, -9.82, 0)
@@ -68,9 +67,9 @@ physicsWorld.addBody(groundBody)
 
 const cannonDebugger = new CannonDebugger(scene, physicsWorld)
 
-// 
-// // CANNON JS BODY
-// 
+// #endregion
+
+// #region CANNON JS BODY
 const shape = CANNON.Trimesh.createTorus(50, 3, 4, 8);
 // const shape = new CANNON.Cylinder(10, 10, 10, 10)
 const body = new CANNON.Body({ mass: 1000 });
@@ -121,9 +120,9 @@ const longBoxBody = new CANNON.Body({
 })
 longBoxBody.position.set(0, 13, 0)
 
-// 
-// // THREE JS GEOMETRY
-// 
+// #endregion
+
+// #region THREE JS GEOMETRY
 
 const sphereGeo = new THREE.SphereGeometry(radius)
 
@@ -312,11 +311,324 @@ loader.load(
   }
 )
 
+var contactLinkedin, contactLinkedinGroup
+loader.load(
+  './obj/contact-linkedin.glb',
+  function(gltf){
+    contactLinkedin = gltf.scene
+    contactLinkedin.scale.set(0.15, 0.15, 0.15);
+    contactLinkedin.rotateX(degToRad(90))
+    contactLinkedin.position.set(0, 40, 5)
+
+    scene.add(contactLinkedin);
+    contactLinkedin.traverse((child) => {
+      if (child.isMesh) child.name = 'contactLinkedin'; // a material i created in the code earlier
+    });
+    contactLinkedin.name = 'contactLinkedin'
+
+  }
+)
+
+function contactLightConf(){
+  const light1 = new THREE.PointLight(0xffffff, 100)
+  const lightHelper1 = new THREE.PointLightHelper(light1)
+  const light2 = new THREE.PointLight(0xffffff, 100)
+  const lightHelper2 = new THREE.PointLightHelper(light2)
+  const light3 = new THREE.PointLight(0xffffff, 100) 
+  const lightHelper3 = new THREE.PointLightHelper(light3)
+  light1.position.set(-15, 26, 15)
+  light2.position.set(10, 29, 12)
+  light3.position.set(0, 27, 0)
+  
+  contactLinkedinGroup = new THREE.Group();
+  contactLinkedinGroup.add(contactLinkedin)
+  contactLinkedinGroup.add(light1, light2, light3)
+  contactLinkedinGroup.add(lightHelper1, lightHelper2, lightHelper3)
+  scene.add(contactLinkedinGroup);
+  
+  contactLinkedinGroup.position.setY(6)
+}
+contactLightConf()
 
 
 // 
-// SCENE INTERACTION
+// // instantiate object
 // 
+
+function instantiateBodyObject(){
+  // scene.add(sphere);
+  scene.add(sphere2);
+  // scene.add(box)
+  // scene.add(box2)
+  // scene.add(cone)
+  // scene.add(longBox)
+  // coneBody.scale.x = 0.005
+
+  physicsWorld.addBody(sphereBody)
+  physicsWorld.addBody(sphereBody2)
+  physicsWorld.addBody(boxBody)  
+  physicsWorld.addBody(boxBody2)
+  physicsWorld.addBody(coneBody)
+  
+  physicsWorld.addBody(longBoxBody)
+  
+  }
+instantiateBodyObject()
+
+// #endregion
+
+// #region SCROLL LISTENER
+
+document.addEventListener('DOMContentLoaded', function () {
+  const circles = document.querySelectorAll('.circle');
+
+  function fillCircles() {
+    circles.forEach((circle, index) => {
+      const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      const fillPercentage = Math.min(scrollPercentage - index * 18, 100); // Adjust the value to control the fill rate, default 30 and fairly good for 6 obj is 10 
+
+      // circle.style.backgroundColor = `hsl(200, 100%, ${fillPercentage}%)`;
+      circle.style.backgroundColor = `rgba(255, 255, 255, ${fillPercentage})`; //original: `rgba(255, 255, 255, ${fillPercentage / 20})`
+
+      // initially multiple of 15
+      if (scrollPercentage >= 3) {
+        marble1Group.visible = true;
+        
+        
+      }else{
+        sphereBody.position.set(2, 7, 0)
+        marble1Group.visible = false;
+      }
+
+      if(scrollPercentage >= 20){
+        sphere2.visible = true;
+        
+      } else {
+        sphereBody2.position.set(0, 7, 2)
+        sphere2.visible = false;
+      }
+
+      if(scrollPercentage >= 37){
+        controllerGroup.visible = true
+      } 
+      else{
+        boxBody.position.set(1, 10, 1)
+        controllerGroup.visible = false
+      }
+
+      if(scrollPercentage >= 55){
+        keyboardGroup.visible = true
+      } 
+      else{
+        boxBody2.position.set(1, 10, 1)
+        keyboardGroup.visible = false
+      }
+
+      if(scrollPercentage >= 73){
+        omniGroup.visible = true
+      }else{
+        coneBody.position.set(0, 13, 0)
+        omniGroup.visible = false
+      }
+
+      if(scrollPercentage >= 90){
+        keypad.visible = true
+      }else{
+        longBoxBody.position.set(0, 15, 0)
+        keypad.visible = false
+      }
+
+
+
+      // CheckAllObjectOnScene();
+      // function CheckAllObjectOnScene(){
+      // console.clear();
+      // scene.traverse( function( object ) {
+        
+      //   if(object instanceof THREE.Mesh){
+      //     console.log(object)
+      // }});
+      // }
+
+    });
+  }
+
+  // Update circles on scroll
+  window.addEventListener('scroll', fillCircles);
+
+  // Initial fill on page load
+  fillCircles();
+});
+
+// #endregion
+
+// #region HTML CHANGE PAGE - CAMERA
+
+function cameraToCenter(){
+  var t = new TWEEN.Tween(controls.target).to(
+    {
+      x: 0,
+      y: 0,
+      z: 0
+    }, 1000)
+    .easing(TWEEN.Easing.Quadratic.Out)
+    .start()
+    .onComplete(function(){
+      controls.enableRotate = true;
+    })
+
+  new TWEEN.Tween(camera.position).to(new THREE.Vector3(20, 15, 20), 1000)
+  .easing(TWEEN.Easing.Cubic.Out)
+  .start()
+  .onStart(function(){
+    controls.enableRotate = false;
+  })
+}
+function cameraToCVAngle(){
+  controls.enableRotate = false;
+
+  new TWEEN.Tween(controls.target).to({
+    x: camera.position.x - 1 * checkQuadrant(camera.position).x,
+    y: camera.position.y - 5,
+    z: camera.position.z - 1 * checkQuadrant(camera.position).y
+  }, 1000)
+  .easing(TWEEN.Easing.Cubic.Out)
+  .start()
+
+  // new TWEEN.Tween(camera.position).to({
+  //   x: camera.position.x + 10 * checkQuadrant(camera.position).x,
+  //   y: camera.position.y,
+  //   z: camera.position.z + 10 * checkQuadrant(camera.position).y
+  // }, 1000)
+  // .easing(TWEEN.Easing.Cubic.Out)
+  // .start()
+  
+}
+function cameraToContact(){
+  controls.enableRotate = false;
+  var t = new TWEEN.Tween(controls.target).to(
+    {
+      x: 0,
+      y: 40,
+      z: 0
+    }, 1000)
+    .easing(TWEEN.Easing.Quadratic.Out)
+    .start()
+    .onComplete(function(){
+      controls.enableRotate = true;
+    })
+
+  // new TWEEN.Tween(camera.position).to(new THREE.Vector3(20, 15, 20), 1000)
+  // .easing(TWEEN.Easing.Cubic.Out)
+  // .start()
+  // .onStart(function(){
+  //   controls.enableRotate = false;
+  // })
+}
+
+// #endregion
+
+// #region HTML change PAGE - CONTENT
+
+var cv_page = document.getElementById('CV_click');
+var home_page = document.getElementById('Home_click');
+var contact_page = document.getElementById('Contact_click');
+cv_page.onclick = showCV;
+home_page.onclick = clearPage;
+contact_page.onclick = contactPage;
+
+// var porto_page = document.getElementById('Porto_click');
+// porto_page.onclick = showPortofolio;
+
+const PAGE_CV = document.getElementById("PAGE_CV")
+const PAGE_Portofolio = document.getElementById("PAGE_Portofolio")
+
+const footer = document.getElementById("footer-project")
+const footerDesc = document.getElementById("footer-desc")
+var Toggle_CV = true
+var Toggle_Contact = true
+var Toggle_showfooter = false
+
+
+function clearPage(){
+  hideElement(PAGE_CV)
+  hideElement(PAGE_Portofolio)
+  if(Toggle_showfooter){
+    hideElement(footer)
+    Toggle_showfooter = false
+  } else{
+    showElement(footer)
+    Toggle_showfooter = true
+  }
+
+  cameraToCenter()
+}
+function showCV(){
+  
+  if(Toggle_CV === true){
+    Toggle_CV = false
+    showElement(PAGE_CV)
+    hideElement(PAGE_Portofolio)
+    hideElement(footer)
+    cameraToCVAngle()
+  }else{
+    Toggle_CV = true
+    hideElement(PAGE_CV)
+    hideElement(PAGE_Portofolio)
+    showElement(footer)
+    cameraToCenter()
+  }
+}
+
+function contactPage(){
+  if(Toggle_Contact === true){
+    Toggle_Contact = false
+    hideElement(PAGE_CV)
+    hideElement(PAGE_Portofolio)
+    hideElement(footer)
+    cameraToContact()
+  }else {
+    Toggle_Contact = true
+    hideElement(PAGE_CV)
+    hideElement(PAGE_Portofolio)
+    showElement(footer)
+    cameraToCenter()
+  }
+}
+
+// fadeIn
+function showElement(element){
+  document.getElementById("container").setAttribute("style", "position: block;");
+  element.setAttribute("style", "display: block");
+  element.classList.remove("fadeOut");
+  element.classList.add("fadeIn");
+}
+// fadeOut
+function hideElement(element){
+  element.classList.add("fadeOut");
+}
+
+function checkQuadrant(objectPosition){
+  let number;
+  if(objectPosition.x > 0 && objectPosition.z > 0){
+    // kuadran 1
+    number = new THREE.Vector2(1, 1);
+  }else if(objectPosition.x < 0 && objectPosition.z > 0){
+    // kuadran 2
+    number = new THREE.Vector2(-1, 1);
+  }else if(objectPosition.x < 0 && objectPosition.z < 0){
+    // kuadran 3
+    number = new THREE.Vector2(-1, -1);
+  }else if(objectPosition.x > 0 && objectPosition.z < 0){
+    // kuadran 4
+    number = new THREE.Vector2(1, -1);
+  }
+  return number
+}
+// #endregion
+
+
+// #region SCENE INTERACTION CLICK & HOVER
 
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
@@ -330,6 +642,9 @@ function onPointerClick( event ) {
   mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObject(scene, true);
+
+  
+
   if(intersects.length > 0){
     console.log(intersects[ 0 ].object); //
     switch(intersects[ 0 ].object.name) {
@@ -377,10 +692,14 @@ function onPointerClick( event ) {
         break;
       case "keypad": //longbox
         var title = 'Personal project: keypad 4v4'
-        var text  = 'aking a keypad 4x4 with encoder, personal project'
+        var text  = 'Making a keypad 4x4 with encoder, personal project'
         var github = 'https://www.google.com/'
         var external = 'https://www.google.com/'
         changeContent(title, text, github, external)
+        break;
+      case "contactLinkedin":
+        // window.location.href = "https://www.linkedin.com/in/rafifazzaki/";
+        window.open('https://www.linkedin.com/in/rafifazzaki/', '_blank');
         break;
       
       default:
@@ -389,6 +708,11 @@ function onPointerClick( event ) {
   }
 
   function changeContent(title, text, github, external) {
+
+        // // HTML change PAGE - CONTENT // //
+        showElement(footer)
+        Toggle_showfooter = true
+        // // // // // // // // // // // // //
 
         var id = "project-title"
         var place = document.getElementById(`${id}`);
@@ -402,10 +726,14 @@ function onPointerClick( event ) {
         id = "link-github"
         place = document.getElementById(`${id}`);
         place.href = `${github}`;
+        place.target="_blank"
 
         id = "link-external"
         place = document.getElementById(`${id}`);
         place.href = `${external}`;
+        place.target="_blank"
+
+        document.getElementById("footer-desc").setAttribute("style", "display: inline;");
   }
 }
 
@@ -441,6 +769,9 @@ function onPointerMove(event){
         case "keypad":
           GLOW();
           break;
+        case "contactLinkedin":
+          GLOW();
+          break;
         
         default:
           // code block
@@ -472,120 +803,10 @@ function onPointerMove(event){
   }
 }
 
+// #endregion
 
 
-// 
-// // instantiate object
-// 
-
-function instantiateBodyObject(){
-  // scene.add(sphere);
-  scene.add(sphere2);
-  // scene.add(box)
-  // scene.add(box2)
-  // scene.add(cone)
-  // scene.add(longBox)
-  // coneBody.scale.x = 0.005
-
-  physicsWorld.addBody(sphereBody)
-  physicsWorld.addBody(sphereBody2)
-  physicsWorld.addBody(boxBody)  
-  physicsWorld.addBody(boxBody2)
-  physicsWorld.addBody(coneBody)
-  
-  physicsWorld.addBody(longBoxBody)
-  
-  }
-instantiateBodyObject()
-
-
-//
-// // Scroll listener
-//
-
-document.addEventListener('DOMContentLoaded', function () {
-  const circles = document.querySelectorAll('.circle');
-
-  function fillCircles() {
-    circles.forEach((circle, index) => {
-      const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      const fillPercentage = Math.min(scrollPercentage - index * 30, 100); // Adjust the value to control the fill rate
-
-      // circle.style.backgroundColor = `hsl(200, 100%, ${fillPercentage}%)`;
-      circle.style.backgroundColor = `rgba(255, 255, 255, ${fillPercentage / 20})`;
-
-      if (scrollPercentage >= 15) {
-        marble1Group.visible = true;
-        
-      }else{
-        sphereBody.position.set(2, 7, 0)
-        marble1Group.visible = false;
-      }
-
-      if(scrollPercentage >= 30){
-        sphere2.visible = true;
-        
-      } else {
-        sphereBody2.position.set(0, 7, 2)
-        sphere2.visible = false;
-      }
-
-      if(scrollPercentage >= 45){
-        controllerGroup.visible = true
-      } 
-      else{
-        boxBody.position.set(1, 10, 1)
-        controllerGroup.visible = false
-      }
-
-      if(scrollPercentage >= 60){
-        keyboardGroup.visible = true
-      } 
-      else{
-        boxBody2.position.set(1, 10, 1)
-        keyboardGroup.visible = false
-      }
-
-      if(scrollPercentage >= 75){
-        omniGroup.visible = true
-      }else{
-        coneBody.position.set(0, 13, 0)
-        omniGroup.visible = false
-      }
-
-      if(scrollPercentage >= 90){
-        keypad.visible = true
-      }else{
-        longBoxBody.position.set(0, 15, 0)
-        keypad.visible = false
-      }
-
-
-
-      // CheckAllObjectOnScene();
-      // function CheckAllObjectOnScene(){
-      // console.clear();
-      // scene.traverse( function( object ) {
-        
-      //   if(object instanceof THREE.Mesh){
-      //     console.log(object)
-      // }});
-      // }
-
-    });
-  }
-
-  // Update circles on scroll
-  window.addEventListener('scroll', fillCircles);
-
-  // Initial fill on page load
-  fillCircles();
-});
-
-
-// 
-// // Three js update
-// 
+// #region THREE JS UPDATE
 
 function animate(){
   physicsWorld.fixedStep()
@@ -616,9 +837,11 @@ function animate(){
 
 
 
-// three
+  // three
   controls.update();
   TWEEN.update()
   renderer.render(scene, camera);
 }
 animate();
+
+// #endregion

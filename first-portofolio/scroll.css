@@ -19,8 +19,8 @@ body {
   }
 
   .circle {
-    width: 25px;
-    height: 25px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     border: 2px solid;
     background-color: lightgray;

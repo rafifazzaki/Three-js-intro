@@ -17,13 +17,12 @@ canvas {
 }
 
 #container{
-  position: static;
+  position: fixed;
   /* display: block; */
   margin: 10rem;
   padding: auto;
   
 }
-
 
 
 #PAGE_CV{
@@ -46,7 +45,7 @@ canvas {
   display: none;
 }
 
-#footer{
+#footer-project{
   /* background-color: aliceblue; */
   backdrop-filter: blur(10px);
   position: fixed;
@@ -63,6 +62,7 @@ canvas {
 #footer-desc{
   margin: 2rem;
   margin-right: 10rem;
+  display: none;
 }
 
 .fadeOut{
@@ -71,7 +71,7 @@ canvas {
 
 @keyframes fadeOut {
   0% {opacity: 1;}
-  100% {opacity: 0;}
+  100% {opacity: 0; display: none;}
 }
 
 .left{
@@ -145,11 +145,11 @@ main{
 
 }
 
-.button-container {
+/* .button-container {
   background-color: aliceblue;
   border: 1em;
   border-color: aliceblue;
-  /* color: black; */
+  
   padding: 1rem;
   text-align: center;
   text-decoration: none;
@@ -157,8 +157,19 @@ main{
   font-size: 16px;
   margin: 4px 4px;
   border-radius: 50%;
-}
+} */
 
-.button{
+/* .button{
 color: black;
+} */
+
+
+.textstyle {
+  background-color: gray; /* Changing background color */
+  font-weight: bold; /* Making font bold */
+  border-radius: 20px; /* Making border radius */
+  width: min-content;
+  /* height: auto;  Making auto-sizable height */
+  padding: 5px 30px 5px 30px; /* Making space around letters */
+  font-size: 18px; /* Changing font size */
 }
