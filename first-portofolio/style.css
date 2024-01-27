@@ -145,19 +145,16 @@ main{
 
 }
 
-/* .button-container {
-  background-color: aliceblue;
-  border: 1em;
-  border-color: aliceblue;
-  
-  padding: 1rem;
-  text-align: center;
-  text-decoration: none;
+.button {
+  background-color: #24a0ed; /* Changing background color */
+  /*font-weight: bold;  Making font bold */
+  border-radius: 20px; /* Making border radius */
+  width: min-content;
+  /* height: auto;  Making auto-sizable height */
+  padding: 5px 30px 5px 30px; /* Making space around letters */
+  font-size: 18px; /* Changing font size */
   display: inline-block;
-  font-size: 16px;
-  margin: 4px 4px;
-  border-radius: 50%;
-} */
+}
 
 /* .button{
 color: black;
@@ -172,4 +169,5 @@ color: black;
   /* height: auto;  Making auto-sizable height */
   padding: 5px 30px 5px 30px; /* Making space around letters */
   font-size: 18px; /* Changing font size */
+  display: inline-block;
 }

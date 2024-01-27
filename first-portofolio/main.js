@@ -650,51 +650,51 @@ function onPointerClick( event ) {
     switch(intersects[ 0 ].object.name) {
       case "sphere2": //box
         var title = 'Zettacamp’s Assignment API'
-        var text  = 'Making REST APIs using Express.js and MongoDB and. and testing using Cypress, and Postman. In addition, learn other materials such as training logic and GIT. Learning starts from basic HTML, CSS, and javascript'
-        var github = 'https://www.google.com/'
-        var external = 'https://www.google.com/'
+        var text  = 'Making REST APIs using Express.js, MongoDB and Postman.'
+        var github = 'https://github.com/zettacamp-rafif-azzaki/rafif_zettacamp_Dolphin'
+        var external = null
 
         changeContent(title, text, github, external)
 
         break;
       case "marble1": //box2
 
-        var title = 'Dicoding’s API & EC2 Deploy Assignments'
-        var text  = 'Build a fully working API with Node.js and HAPI.js. and deploying note-taking app’s backend to the Amazon EC2 Instance'
-        var github = 'https://www.google.com/'
-        var external = 'https://www.google.com/'
+        var title = 'Dicoding’s API & Amazon Deployment'
+        var text  = 'Build a notes app API using HAPI.js and deploying it to the Amazon EC2 Instance and Amazon RDS'
+        var github = 'https://github.com/rafifazzaki/Dicoding_Belajar-Membuat-Aplikasi-Back-End-untuk-Pemula/tree/main/notes-app-back-end'
+        var external = null
 
         changeContent(title, text, github, external)
         break;
       case "keyboard": //sphere
 
         var title = 'Prototype \"Finitra\" (Capslock team)'
-        var text  = 'Prototype game \"Finitra\" is a game that was proposed at Game Development Competition Find IT 2018 organized by KMTETI Universitas Gadjah Mada.'
-        var github = 'https://www.google.com/'
-        var external = 'https://www.google.com/'
+        var text  = 'Prototype game \"Finitra\" is a game that was proposed at Game Development Competition Find IT UGM 2018.'
+        var github = null
+        var external = 'https://www.youtube.com/watch?v=g1DHGZtHzd8'
 
         changeContent(title, text, github, external)
         break;
       case "controller": //sphere2
 
         var title = 'COMPFEST 12 2020 - Postman (Large Iced Tea)'
-        var text  = 'Compfest 12 Indie Game Ignite which was organized by Mahasiswa Fakultas Ilmu Komputer Universitas Indonesia. with Large Iced Tea team, we produce a game \"Postman\"'
-        var github = 'https://www.google.com/'
-        var external = 'https://www.google.com/'
+        var text  = 'Compfest 12 Indie Game Ignite which was organized by Fasilkom UI. with Large Iced Tea team, we produce a game \"Postman\"'
+        var github = null
+        var external = 'https://www.youtube.com/watch?v=9Vi7TXo9r3M'
         changeContent(title, text, github, external)
         break;
       case "omni": //cone
         var title = 'Robot Soccer Prototype'
         var text  = 'Member of a team to build Robot Soccer Prototype made according to KRSBI 2018'
-        var github = 'https://www.google.com/'
-        var external = 'https://www.google.com/'
+        var github = null
+        var external = 'https://drive.google.com/file/d/1lEu4V6Dt39EpsLrn5UX8eultKxCm31j3/view?usp=drive_link'
         changeContent(title, text, github, external)
         break;
       case "keypad": //longbox
         var title = 'Personal project: keypad 4v4'
         var text  = 'Making a keypad 4x4 with encoder, personal project'
-        var github = 'https://www.google.com/'
-        var external = 'https://www.google.com/'
+        var github = null
+        var external = 'https://drive.google.com/file/d/1eAUP3V0yw0hRetyCTDQBkuzKrx_q5W8F/view?usp=drive_link'
         changeContent(title, text, github, external)
         break;
       case "contactLinkedin":
@@ -723,15 +723,26 @@ function onPointerClick( event ) {
         place = document.getElementById(`${id}`);
         place.textContent = `${text}`;
 
-        id = "link-github"
-        place = document.getElementById(`${id}`);
-        place.href = `${github}`;
-        place.target="_blank"
+        document.getElementById("link-github").setAttribute("style", "display: none;");
+        document.getElementById("link-external").setAttribute("style", "display: none;");
 
-        id = "link-external"
-        place = document.getElementById(`${id}`);
-        place.href = `${external}`;
-        place.target="_blank"
+
+        if(github !== null){
+          id = "link-github"
+          place = document.getElementById(`${id}`);
+          place.href = `${github}`;
+          place.target="_blank"
+          document.getElementById("link-github").setAttribute("style", "display: inline;");
+        }
+
+        if(external !== null){
+          id = "link-external"
+          place = document.getElementById(`${id}`);
+          place.href = `${external}`;
+          place.target="_blank"
+
+          document.getElementById("link-external").setAttribute("style", "display: inline;");
+        }
 
         document.getElementById("footer-desc").setAttribute("style", "display: inline;");
   }
