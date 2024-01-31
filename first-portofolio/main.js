@@ -41,6 +41,9 @@ function onWindowResize(){
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
+
+  CheckWindowsSize()
+  
 }
 window.addEventListener('resize', onWindowResize);
 
@@ -48,6 +51,42 @@ if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
+var isMobile = false
+
+function CheckWindowsSize(){
+  // console.log(window.innerWidth);
+  if(window.innerWidth < 682){
+    console.log(window.innerWidth);
+    document.getElementById("Home_click").innerHTML = "M Rafif Azzaki";
+    document.getElementById("project-desc").setAttribute("style", "font-size: 1rem;");0
+    isMobile = true
+    hideScroll()
+    modelLinedUp()
+    
+    
+    // document.getElementsByClassName("cv_content").setAttribute("style", "font-size: 0.5rem;");
+  } else{
+    document.getElementById("Home_click").innerHTML = "Muhammad Rafif Azzaki";
+    document.getElementById("project-desc").setAttribute("style", "font-size: 1.5rem;");
+    showScroll()
+    
+  }
+
+  if(window.innerWidth < 480){
+    
+    console.log(window.innerWidth);
+    document.getElementById("Home_click").innerHTML = "Rafif Azzaki";
+  }
+
+  if(window.innerWidth < 430){
+    // 320 from https://stackoverflow.com/questions/27971231/guidelines-for-resizing-and-adjusting-for-mobile-devices-using-javascript
+    console.log(window.innerWidth);
+    document.getElementById("Home_click").innerHTML = "MRA";
+  }
+
+}
+
+CheckWindowsSize()
 // #endregion
 
 // #region INIT CANNON JS
@@ -174,6 +213,7 @@ const plane = new THREE.Mesh(
 plane.position.setY(-1.5)
 plane.rotateX(degToRad(-90))
 scene.add(plane)
+
 
 const loader = new GLTFLoader();
 let keypad
@@ -462,6 +502,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // #endregion
 
+
 // #region HTML CHANGE PAGE - CAMERA
 
 function cameraToCenter(){
@@ -570,6 +611,7 @@ function showCV(){
     showElement(PAGE_CV)
     hideElement(PAGE_Portofolio)
     hideElement(footer)
+
     cameraToCVAngle()
   }else{
     Toggle_CV = true
@@ -586,6 +628,8 @@ function contactPage(){
     hideElement(PAGE_CV)
     hideElement(PAGE_Portofolio)
     hideElement(footer)
+    hideScroll();
+
     cameraToContact()
   }else {
     Toggle_Contact = true
@@ -593,12 +637,27 @@ function contactPage(){
     hideElement(PAGE_Portofolio)
     showElement(footer)
     cameraToCenter()
+
+    if(isMobile === false) showScroll()
   }
 }
 
+function hideScroll(){
+  document.body.style.overflowY = 'hidden'
+  document.getElementById("circle-container").setAttribute("style", "display: none;");
+}
+
+function showScroll(){
+  document.body.style.overflowY = 'scroll'
+  // document.body.scrollTop = 15;
+  document.getElementById("circle-container").setAttribute("style", "display: flex;");
+}
+
+
+
 // fadeIn
 function showElement(element){
-  document.getElementById("container").setAttribute("style", "position: block;");
+  // document.getElementById("container").setAttribute("style", "position: block;");
   element.setAttribute("style", "display: block");
   element.classList.remove("fadeOut");
   element.classList.add("fadeIn");
@@ -856,3 +915,27 @@ function animate(){
 animate();
 
 // #endregion
+
+async function modelLinedUp(){
+  marble1Group.visible = true;
+  sphere2.visible = true;
+  controllerGroup.visible = true
+  keyboardGroup.visible = true
+  omniGroup.visible = true
+  keypad.visible = true
+
+  sphereBody.position.set(0, 0, 0) //marble1
+  sphereBody2.position.set(0, 0, 5) //marble2
+  boxBody.position.set(5, 0, 0) //controller
+  boxBody2.position.set(0, 10, -5) //keyboard
+  boxBody2.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0), degToRad(45));
+  coneBody.position.set(5, 10, 5)
+  longBoxBody.position.set(-5, 5, 5) //keypad
+}
+
+// window.onload = function(){
+//    if(window.innerWidth < 682){
+//     modelLinedUp()
+    
+//   } 
+// };

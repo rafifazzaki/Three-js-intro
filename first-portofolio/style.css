@@ -5,6 +5,10 @@
   color: aliceblue;
 }
 
+h2{
+  margin-bottom: 0.25rem;
+}
+
 body{
   margin: 0;
   min-height: 500vh;
@@ -18,14 +22,22 @@ canvas {
 
 #container{
   position: fixed;
+  /* text-align: center; */
   /* display: block; */
-  margin: 10rem;
+  margin: 1rem;
   padding: auto;
-  
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
+.cv_content{
+  font-size: 1rem;
+  margin: 0;
+}
 
 #PAGE_CV{
+  text-align: center;
   font-size: larger;
   display: none;
   backdrop-filter: blur(10px);
@@ -45,6 +57,7 @@ canvas {
   display: none;
 }
 
+
 #footer-project{
   /* background-color: aliceblue; */
   backdrop-filter: blur(10px);
@@ -52,16 +65,16 @@ canvas {
   overflow-wrap: break-word;
   text-align: left;
   left: 0;
+  right: 0;
   bottom: 0;
-  width: 100%;
-  margin: 2rem;
+  /* width: 100%; */
+  margin: 1rem;
   margin-bottom: 1rem;
-  
 }
 
 #footer-desc{
-  margin: 2rem;
-  margin-right: 10rem;
+  /* margin: 1rem; */
+  /* margin-right: 10rem; */
   display: none;
 }
 
@@ -162,12 +175,14 @@ color: black;
 
 
 .textstyle {
-  background-color: gray; /* Changing background color */
-  font-weight: bold; /* Making font bold */
+  /* background-color: gray; */
+  border-style: solid;
+  
   border-radius: 20px; /* Making border radius */
   width: min-content;
   /* height: auto;  Making auto-sizable height */
-  padding: 5px 30px 5px 30px; /* Making space around letters */
-  font-size: 18px; /* Changing font size */
+  padding: 5px 10px 5px 10px; /* Making space around letters */
+  font-size: 15px; /* Changing font size */
   display: inline-block;
 }
+
