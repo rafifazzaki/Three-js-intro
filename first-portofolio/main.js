@@ -53,22 +53,28 @@ if ('scrollRestoration' in history) {
 
 var isMobile = false
 
+// async function loadModel(){
+//   await modelLinedUp()
+// }
+
 function CheckWindowsSize(){
+  console.log('in check window size');
   // console.log(window.innerWidth);
   if(window.innerWidth < 682){
     console.log(window.innerWidth);
     document.getElementById("Home_click").innerHTML = "M Rafif Azzaki";
     document.getElementById("project-desc").setAttribute("style", "font-size: 1rem;");0
     isMobile = true
-    hideScroll()
-    modelLinedUp()
+    hideMainScroll()
+    // loadModel()
+    
     
     
     // document.getElementsByClassName("cv_content").setAttribute("style", "font-size: 0.5rem;");
   } else{
     document.getElementById("Home_click").innerHTML = "Muhammad Rafif Azzaki";
     document.getElementById("project-desc").setAttribute("style", "font-size: 1.5rem;");
-    showScroll()
+    showMainScroll()
     
   }
 
@@ -82,6 +88,10 @@ function CheckWindowsSize(){
     // 320 from https://stackoverflow.com/questions/27971231/guidelines-for-resizing-and-adjusting-for-mobile-devices-using-javascript
     console.log(window.innerWidth);
     document.getElementById("Home_click").innerHTML = "MRA";
+  }
+
+  if(window.innerHeight < 650){
+    isMobile = true
   }
 
 }
@@ -198,6 +208,39 @@ const longBox = new THREE.Mesh(
 longBox.name = 'longBox';
 
 
+var manager = new THREE.LoadingManager();
+manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+
+    console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+};
+
+manager.onLoad = function ( ) {
+
+  console.log( 'Loading complete!');
+  
+  if(window.innerWidth < 682){
+    modelLinedUp()
+  }
+
+  
+
+};
+
+
+manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+
+  console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+};
+
+manager.onError = function ( url ) {
+
+  console.log( 'There was an error loading ' + url );
+
+};
+
+
 // const lightAmbient = new THREE.AmbientLight(0xffffff, 10)
 // scene.add(lightAmbient)
 const light = new THREE.PointLight(0xffffff, 100) //10
@@ -215,7 +258,7 @@ plane.rotateX(degToRad(-90))
 scene.add(plane)
 
 
-const loader = new GLTFLoader();
+const loader = new GLTFLoader( manager );
 let keypad
 loader.load(
   './obj/keypad.glb',
@@ -347,7 +390,7 @@ loader.load(
     marble1.name = 'marble1'
     marble1Group.name = 'marble1'
 
-    marble1Group.visible = false;
+    // marble1Group.visible = false;
   }
 )
 
@@ -420,6 +463,8 @@ instantiateBodyObject()
 // #region SCROLL LISTENER
 
 document.addEventListener('DOMContentLoaded', function () {
+
+  
   const circles = document.querySelectorAll('.circle');
 
   function fillCircles() {
@@ -612,11 +657,19 @@ function showCV(){
     hideElement(PAGE_Portofolio)
     hideElement(footer)
 
+    hideMainScroll()
+    // document.getElementById('container').setAttribute("style", "display: block");
+    document.getElementById('container').setAttribute("style", "display: block; overflow-y: scroll;");
     cameraToCVAngle()
   }else{
     Toggle_CV = true
     hideElement(PAGE_CV)
     hideElement(PAGE_Portofolio)
+    console.log('owe');
+
+    
+    showMainScroll()
+    document.getElementById('container').setAttribute("style", "display: none; overflow-y: none;");
     showElement(footer)
     cameraToCenter()
   }
@@ -625,10 +678,11 @@ function showCV(){
 function contactPage(){
   if(Toggle_Contact === true){
     Toggle_Contact = false
+  
     hideElement(PAGE_CV)
     hideElement(PAGE_Portofolio)
     hideElement(footer)
-    hideScroll();
+    hideMainScroll();
 
     cameraToContact()
   }else {
@@ -638,16 +692,20 @@ function contactPage(){
     showElement(footer)
     cameraToCenter()
 
-    if(isMobile === false) showScroll()
+    if(isMobile === false) showMainScroll()
   }
 }
 
-function hideScroll(){
+function hideMainScroll(){
+  
   document.body.style.overflowY = 'hidden'
   document.getElementById("circle-container").setAttribute("style", "display: none;");
 }
 
-function showScroll(){
+function showMainScroll(){
+  if(isMobile){
+    return
+  }
   document.body.style.overflowY = 'scroll'
   // document.body.scrollTop = 15;
   document.getElementById("circle-container").setAttribute("style", "display: flex;");
@@ -658,13 +716,29 @@ function showScroll(){
 // fadeIn
 function showElement(element){
   // document.getElementById("container").setAttribute("style", "position: block;");
-  element.setAttribute("style", "display: block");
+  
+  console.log('ba');
+
+  element.setAttribute("style", "display: block");//overflow-y: scroll;
+  if(element != footer){
+    
+    // document.getElementById('container').setAttribute("style", "display: block");
+    
+    
+  }
   element.classList.remove("fadeOut");
   element.classList.add("fadeIn");
 }
 // fadeOut
 function hideElement(element){
+  
+  // // document.getElementById('container').setAttribute("style", "display: block");
+  
+
+  element.setAttribute("style", "display: none");//overflow-y: scroll;
   element.classList.add("fadeOut");
+  
+  
 }
 
 function checkQuadrant(objectPosition){
@@ -883,7 +957,6 @@ function animate(){
   // cannonDebugger.update() //for checking rendered body
   requestAnimationFrame(animate)
 
-
   marble1Group.position.copy(sphereBody.position)
   marble1Group.quaternion.copy(sphereBody.quaternion)
 
@@ -916,7 +989,7 @@ animate();
 
 // #endregion
 
-async function modelLinedUp(){
+function modelLinedUp(){
   marble1Group.visible = true;
   sphere2.visible = true;
   controllerGroup.visible = true
@@ -939,3 +1012,9 @@ async function modelLinedUp(){
     
 //   } 
 // };
+
+// if(window.innerWidth < 682){
+//   console.log('in');
+//   modelLinedUp()
+// }
+

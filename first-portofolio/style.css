@@ -24,11 +24,23 @@ canvas {
   position: fixed;
   /* text-align: center; */
   /* display: block; */
-  margin: 1rem;
+  /* margin: 1rem; */
+  /* width: 600px; */
+  width: 100vw;
+  height: 90vh;
   padding: auto;
-  top: 50%;
+  /* top: 50%; */
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 2rem);
+  max-height: 100%;
+  display: none;
+  /* top: 15rem;  */
+  /* top: 315px; */
+  /* margin-top: 200px; */
+  /* bottom: 50%; */
+  /* margin-top: 5rem; */
+  /* margin-bottom: 10rem; */
+  overflow-y: none;
 }
 
 .cv_content{
@@ -76,6 +88,21 @@ canvas {
   /* margin: 1rem; */
   /* margin-right: 10rem; */
   display: none;
+}
+
+#true-footer{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#true-footer p{
+  margin: 0;
+  font-size: 0.5rem;
+
+  text-align: center;
+  font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
 
 .fadeOut{
