@@ -178,7 +178,7 @@ const sphereGeo = new THREE.SphereGeometry(radius)
 const sphereMat = new THREE.MeshBasicMaterial({color:0xE58943}); //0x818589
 const sphere = new THREE.Mesh(sphereGeo, sphereMat)
 
-const sphereMat2 = new THREE.MeshBasicMaterial({color:0xE58943}); //0x818589
+const sphereMat2 = new THREE.MeshStandardMaterial({color:0xE58943}); //0x818589
 const sphere2 = new THREE.Mesh(sphereGeo, sphereMat2)
 sphere.name = 'sphere';
 sphere2.name = 'sphere2';
