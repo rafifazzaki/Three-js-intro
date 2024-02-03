@@ -474,6 +474,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const circles = document.querySelectorAll('.circle');
 
   function fillCircles() {
+    if(!isDoneLoading) return
     circles.forEach((circle, index) => {
       const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
       const fillPercentage = Math.min(scrollPercentage - index * 18, 100); // Adjust the value to control the fill rate, default 30 and fairly good for 6 obj is 10 
