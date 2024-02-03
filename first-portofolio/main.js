@@ -964,38 +964,38 @@ console.log('after click and hover');
 
 function animate(){
   
+  if(!isDoneLoading) return
+    physicsWorld.fixedStep()
+    // cannonDebugger.update() //for checking rendered body
+    requestAnimationFrame(animate)
 
-  //   physicsWorld.fixedStep()
-  //   // cannonDebugger.update() //for checking rendered body
-  //   requestAnimationFrame(animate)
-
-  //   if(!isDoneLoading) return
     
-  //   marble1Group.position.copy(sphereBody.position)
-  //   marble1Group.quaternion.copy(sphereBody.quaternion)
+    
+    marble1Group.position.copy(sphereBody.position)
+    marble1Group.quaternion.copy(sphereBody.quaternion)
   
-  //   sphere2.position.copy(sphereBody2.position)
-  //   sphere2.quaternion.copy(sphereBody2.quaternion)
-  
-  
-  //   controllerGroup.position.copy(boxBody.position)
-  //   controllerGroup.quaternion.copy(boxBody.quaternion)
-  
-  //   keyboardGroup.position.copy(boxBody2.position)
-  //   keyboardGroup.quaternion.copy(boxBody2.quaternion)
+    sphere2.position.copy(sphereBody2.position)
+    sphere2.quaternion.copy(sphereBody2.quaternion)
   
   
-  //   // omni.position.copy(coneBody.position)
-  //   omniGroup.position.set(coneBody.position.x, coneBody.position.y, coneBody.position.z) // x, y-.5, z+7
-  //   omniGroup.quaternion.copy(coneBody.quaternion)
+    controllerGroup.position.copy(boxBody.position)
+    controllerGroup.quaternion.copy(boxBody.quaternion)
   
-  //   keypad.position.copy(longBoxBody.position)
-  //   keypad.quaternion.copy(longBoxBody.quaternion)
+    keyboardGroup.position.copy(boxBody2.position)
+    keyboardGroup.quaternion.copy(boxBody2.quaternion)
+  
+  
+    // omni.position.copy(coneBody.position)
+    omniGroup.position.set(coneBody.position.x, coneBody.position.y, coneBody.position.z) // x, y-.5, z+7
+    omniGroup.quaternion.copy(coneBody.quaternion)
+  
+    keypad.position.copy(longBoxBody.position)
+    keypad.quaternion.copy(longBoxBody.quaternion)
 
-  //   // three
-  // controls.update();
-  // TWEEN.update()
-  // renderer.render(scene, camera);
+    // three
+  controls.update();
+  TWEEN.update()
+  renderer.render(scene, camera);
   
 }
 animate();
