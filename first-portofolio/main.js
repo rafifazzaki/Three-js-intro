@@ -99,7 +99,7 @@ function CheckWindowsSize(){
 
 CheckWindowsSize()
 // #endregion
-
+console.log('after init three & window');
 // #region INIT CANNON JS
 
 const physicsWorld = new CANNON.World({
@@ -118,7 +118,7 @@ physicsWorld.addBody(groundBody)
 const cannonDebugger = new CannonDebugger(scene, physicsWorld)
 
 // #endregion
-
+console.log('after init cannon');
 // #region CANNON JS BODY
 const shape = CANNON.Trimesh.createTorus(50, 3, 4, 8);
 // const shape = new CANNON.Cylinder(10, 10, 10, 10)
@@ -171,42 +171,42 @@ const longBoxBody = new CANNON.Body({
 longBoxBody.position.set(0, 13, 0)
 
 // #endregion
-
+console.log('after cannon body');
 // #region THREE JS GEOMETRY
 
 const sphereGeo = new THREE.SphereGeometry(radius)
 
-const sphereMat = new THREE.MeshBasicMaterial({color:0xE58943}); //0x818589
-const sphere = new THREE.Mesh(sphereGeo, sphereMat)
+// const sphereMat = new THREE.MeshBasicMaterial({color:0xE58943}); //0x818589
+// const sphere = new THREE.Mesh(sphereGeo, sphereMat)
 
 const sphereMat2 = new THREE.MeshStandardMaterial({color:0xE58943}); //0x818589
 const sphere2 = new THREE.Mesh(sphereGeo, sphereMat2)
-sphere.name = 'sphere';
+// sphere.name = 'sphere';
 sphere2.name = 'sphere2';
 
-const box = new THREE.Mesh(
-  new THREE.BoxGeometry(2, 2, 2),
-  new THREE.MeshBasicMaterial()
-)
-box.name = 'box'
+// const box = new THREE.Mesh(
+//   new THREE.BoxGeometry(2, 2, 2),
+//   new THREE.MeshBasicMaterial()
+// )
+// box.name = 'box'
 
-const box2 = new THREE.Mesh(
-  new THREE.BoxGeometry(2, 2, 2),
-  new THREE.MeshBasicMaterial()
-)
-box2.name = 'box2'
+// const box2 = new THREE.Mesh(
+//   new THREE.BoxGeometry(2, 2, 2),
+//   new THREE.MeshBasicMaterial()
+// )
+// box2.name = 'box2'
 
-const cone = new THREE.Mesh(
-  new THREE.ConeGeometry(3, 5, 4),
-  new THREE.MeshBasicMaterial()
-)
-cone.name = 'cone';
+// const cone = new THREE.Mesh(
+//   new THREE.ConeGeometry(3, 5, 4),
+//   new THREE.MeshBasicMaterial()
+// )
+// cone.name = 'cone';
 
-const longBox = new THREE.Mesh(
-  new THREE.BoxGeometry(4, 0.4, 4),
-  new THREE.MeshBasicMaterial()
-)
-longBox.name = 'longBox';
+// const longBox = new THREE.Mesh(
+//   new THREE.BoxGeometry(4, 0.4, 4),
+//   new THREE.MeshBasicMaterial()
+// )
+// longBox.name = 'longBox';
 
 
 var manager = new THREE.LoadingManager();
@@ -220,10 +220,14 @@ manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
   
+
+  instantiateBodyObject()
+
   if(window.innerWidth < 682){
     modelLinedUp()
   }
 
+  
   isDoneLoading = true
 
 };
@@ -457,10 +461,11 @@ function instantiateBodyObject(){
   physicsWorld.addBody(longBoxBody)
   
   }
-instantiateBodyObject()
+
+
 
 // #endregion
-
+console.log('after three geo');
 // #region SCROLL LISTENER
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -547,7 +552,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // #endregion
-
+console.log('after scroll listener');
 
 // #region HTML CHANGE PAGE - CAMERA
 
@@ -614,7 +619,7 @@ function cameraToContact(){
 }
 
 // #endregion
-
+console.log('after change page cam');
 // #region HTML change PAGE - CONTENT
 
 var cv_page = document.getElementById('CV_click');
@@ -760,7 +765,7 @@ function checkQuadrant(objectPosition){
   return number
 }
 // #endregion
-
+console.log('after change page content');
 
 // #region SCENE INTERACTION CLICK & HOVER
 
@@ -952,7 +957,7 @@ function onPointerMove(event){
 }
 
 // #endregion
-
+console.log('after click and hover');
 
 // #region THREE JS UPDATE
 
@@ -1012,16 +1017,3 @@ function modelLinedUp(){
   coneBody.position.set(5, 10, 5)
   longBoxBody.position.set(-5, 5, 5) //keypad
 }
-
-// window.onload = function(){
-//    if(window.innerWidth < 682){
-//     modelLinedUp()
-    
-//   } 
-// };
-
-// if(window.innerWidth < 682){
-//   console.log('in');
-//   modelLinedUp()
-// }
-
