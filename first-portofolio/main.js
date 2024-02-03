@@ -465,6 +465,7 @@ instantiateBodyObject()
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  if(!isDoneLoading) return
   
   const circles = document.querySelectorAll('.circle');
 
@@ -772,6 +773,10 @@ renderer.domElement.addEventListener('mousemove', onPointerMove, false) //pointe
 renderer.domElement.addEventListener('click', onPointerClick, false)
 
 function onPointerClick( event ) {
+
+  if(!isDoneLoading) return
+
+
   mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
   mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
@@ -883,6 +888,10 @@ function onPointerClick( event ) {
 }
 
 function onPointerMove(event){
+
+  if(!isDoneLoading) return
+
+
   mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
   mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
@@ -954,11 +963,14 @@ function onPointerMove(event){
 // #region THREE JS UPDATE
 
 function animate(){
-  physicsWorld.fixedStep()
-  // cannonDebugger.update() //for checking rendered body
-  requestAnimationFrame(animate)
+    physicsWorld.fixedStep()
+    // cannonDebugger.update() //for checking rendered body
+    requestAnimationFrame(animate)
 
-  if(isDoneLoading){
+
+    if(!isDoneLoading) return
+
+
     marble1Group.position.copy(sphereBody.position)
     marble1Group.quaternion.copy(sphereBody.quaternion)
   
@@ -979,16 +991,12 @@ function animate(){
   
     keypad.position.copy(longBoxBody.position)
     keypad.quaternion.copy(longBoxBody.quaternion)
-  }
 
+    // three
+    controls.update();
+    TWEEN.update()
+    renderer.render(scene, camera);
   
-
-
-
-  // three
-  controls.update();
-  TWEEN.update()
-  renderer.render(scene, camera);
 }
 animate();
 
