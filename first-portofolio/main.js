@@ -213,6 +213,8 @@ var manager = new THREE.LoadingManager();
 manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 
     console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+    
+    
 
 };
 
@@ -220,6 +222,9 @@ manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
   
+
+  document.getElementById("loading").setAttribute('style', 'display: none')
+
 
   instantiateBodyObject()
 
@@ -236,6 +241,7 @@ manager.onLoad = function ( ) {
 manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
 
   console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+  document.getElementById("loader-text").innerText = `please wait (${Math.round(100*itemsLoaded/itemsTotal)}%)`
 
 };
 

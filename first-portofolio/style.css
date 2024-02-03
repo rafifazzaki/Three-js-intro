@@ -213,3 +213,47 @@ color: black;
   display: inline-block;
 }
 
+#loading{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  /* top: 50%;
+  left: 50%; */
+  overflow-y: none;
+  background-color: #1a1e21;
+  /* #132133 #2d2d3d #1e1e29 #242a2d  */
+}
+
+#loader-pos{
+  
+  width: 100vw;
+  height: 100vh;
+  /* background-color: grey; */
+  transform: translate(50%, 50%);
+  
+}
+#loader-pos p{
+  transform: translate(-15vh, 0);
+}
+
+
+
+/* https://css-loaders.com/bars/ */
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 60px;
+  aspect-ratio: 1;
+  --_g: no-repeat radial-gradient(farthest-side,#fff 90%,#0000);
+  background: var(--_g), var(--_g), var(--_g);
+  background-size: 25% 25%;
+  animation: l17 1s infinite;
+}
+@keyframes l17{ 
+  0%     {background-position: 0% -100%,50% -100%,100% -100%}
+  16.67% {background-position: 0%   50%,50% -100%,100% -100%}
+  33.33% {background-position: 0%   50%,50%   50%,100% -100%}
+  45%,55%{background-position: 0%   50%,50%   50%,100%   50%}
+  66.67% {background-position: 0%  200%,50%   50%,100%   50%}
+  83.33% {background-position: 0%  200%,50%  200%,100%   50%}
+  100%   {background-position: 0%  200%,50%  200%,100%  200%}
+}
