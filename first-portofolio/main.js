@@ -266,7 +266,7 @@ scene.add(plane)
 const loader = new GLTFLoader( manager );
 let keypad
 loader.load(
-  './public/obj/keypad.glb',
+  '/obj/keypad.glb',
   function(gltf){
     keypad = gltf.scene
     // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
@@ -291,7 +291,7 @@ loader.load(
 )
 var omni, omniGroup
 loader.load(
-  './public/obj/omnidirectional.glb',
+  '/obj/omnidirectional.glb',
   function(gltf){
     omni = gltf.scene
     // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
@@ -319,7 +319,7 @@ loader.load(
 )
 var controller, controllerGroup
 loader.load(
-  './public/obj/game_controller2.glb',
+  '/obj/game_controller2.glb',
   function(gltf){
     controller = gltf.scene
     // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
@@ -346,7 +346,7 @@ loader.load(
 )
 var keyboardGroup, keyboard
 loader.load(
-  './public/obj/mech_keyboard.glb',
+  '/obj/mech_keyboard.glb',
   function(gltf){
     keyboard = gltf.scene
     // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
@@ -373,7 +373,7 @@ loader.load(
 )
 var marble1, marble1Group
 loader.load(
-  './public/obj/marble_test.glb',
+  '/obj/marble_test.glb',
   function(gltf){
     marble1 = gltf.scene
     // var newMaterial = new THREE.MeshBasicMaterial({color: 0xE58943, wireframe: false})
@@ -401,7 +401,7 @@ loader.load(
 
 var contactLinkedin, contactLinkedinGroup
 loader.load(
-  './public/obj/contact-linkedin.glb',
+  '/obj/contact-linkedin.glb',
   function(gltf){
     contactLinkedin = gltf.scene
     contactLinkedin.scale.set(0.15, 0.15, 0.15);
