@@ -963,7 +963,10 @@ console.log('after click and hover');
 // #region THREE JS UPDATE
 
 function animate(){
-  
+    // three
+    controls.update();
+    TWEEN.update()
+    renderer.render(scene, camera);
   if(!isDoneLoading) return
     physicsWorld.fixedStep()
     // cannonDebugger.update() //for checking rendered body
@@ -992,10 +995,7 @@ function animate(){
     keypad.position.copy(longBoxBody.position)
     keypad.quaternion.copy(longBoxBody.quaternion)
 
-    // three
-  controls.update();
-  TWEEN.update()
-  renderer.render(scene, camera);
+  
   
 }
 animate();
