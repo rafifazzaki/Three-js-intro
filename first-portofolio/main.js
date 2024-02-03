@@ -963,14 +963,17 @@ console.log('after click and hover');
 // #region THREE JS UPDATE
 
 function animate(){
+
+    physicsWorld.fixedStep()
+    // cannonDebugger.update() //for checking rendered body
+    requestAnimationFrame(animate)
+
     // three
     controls.update();
     TWEEN.update()
     renderer.render(scene, camera);
   if(!isDoneLoading) return
-    physicsWorld.fixedStep()
-    // cannonDebugger.update() //for checking rendered body
-    requestAnimationFrame(animate)
+    
 
     
     
