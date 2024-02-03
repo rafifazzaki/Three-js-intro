@@ -52,6 +52,7 @@ if ('scrollRestoration' in history) {
 }
 
 var isMobile = false
+var isDoneLoading = false
 
 // async function loadModel(){
 //   await modelLinedUp()
@@ -223,7 +224,7 @@ manager.onLoad = function ( ) {
     modelLinedUp()
   }
 
-  
+  isDoneLoading = true
 
 };
 
@@ -957,26 +958,30 @@ function animate(){
   // cannonDebugger.update() //for checking rendered body
   requestAnimationFrame(animate)
 
-  marble1Group.position.copy(sphereBody.position)
-  marble1Group.quaternion.copy(sphereBody.quaternion)
+  if(isDoneLoading){
+    marble1Group.position.copy(sphereBody.position)
+    marble1Group.quaternion.copy(sphereBody.quaternion)
+  
+    sphere2.position.copy(sphereBody2.position)
+    sphere2.quaternion.copy(sphereBody2.quaternion)
+  
+  
+    controllerGroup.position.copy(boxBody.position)
+    controllerGroup.quaternion.copy(boxBody.quaternion)
+  
+    keyboardGroup.position.copy(boxBody2.position)
+    keyboardGroup.quaternion.copy(boxBody2.quaternion)
+  
+  
+    // omni.position.copy(coneBody.position)
+    omniGroup.position.set(coneBody.position.x, coneBody.position.y, coneBody.position.z) // x, y-.5, z+7
+    omniGroup.quaternion.copy(coneBody.quaternion)
+  
+    keypad.position.copy(longBoxBody.position)
+    keypad.quaternion.copy(longBoxBody.quaternion)
+  }
 
-  sphere2.position.copy(sphereBody2.position)
-  sphere2.quaternion.copy(sphereBody2.quaternion)
-
-
-  controllerGroup.position.copy(boxBody.position)
-  controllerGroup.quaternion.copy(boxBody.quaternion)
-
-  keyboardGroup.position.copy(boxBody2.position)
-  keyboardGroup.quaternion.copy(boxBody2.quaternion)
-
-
-  // omni.position.copy(coneBody.position)
-  omniGroup.position.set(coneBody.position.x, coneBody.position.y, coneBody.position.z) // x, y-.5, z+7
-  omniGroup.quaternion.copy(coneBody.quaternion)
-
-  keypad.position.copy(longBoxBody.position)
-  keypad.quaternion.copy(longBoxBody.quaternion)
+  
 
 
 
