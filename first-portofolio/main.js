@@ -466,7 +466,8 @@ instantiateBodyObject()
 document.addEventListener('DOMContentLoaded', function () {
 
   if(!isDoneLoading) return
-  
+  console.log("scroll listener");
+
   const circles = document.querySelectorAll('.circle');
 
   function fillCircles() {
@@ -775,7 +776,7 @@ renderer.domElement.addEventListener('click', onPointerClick, false)
 function onPointerClick( event ) {
 
   if(!isDoneLoading) return
-
+  console.log('hover and click');
 
   mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
   mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
@@ -966,7 +967,7 @@ function animate(){
     physicsWorld.fixedStep()
     // cannonDebugger.update() //for checking rendered body
     requestAnimationFrame(animate)
-
+    console.log('animate()');
 
     if(!isDoneLoading) return
 
