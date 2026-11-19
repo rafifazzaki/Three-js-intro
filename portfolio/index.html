@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Muhammad Rafif Azzaki — Portfolio</title>
+    <meta
+      name="description"
+      content="Portfolio of Muhammad Rafif Azzaki — backend and game developer. An interactive 3D scene built with Three.js and cannon-es."
+    />
+    <meta name="theme-color" content="#0d0f12" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Muhammad Rafif Azzaki — Portfolio" />
+    <meta
+      property="og:description"
+      content="Backend and game developer. An interactive 3D portfolio built with Three.js and cannon-es."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <!-- The canvas is fixed behind everything; the page scrolls over it. -->
+    <canvas id="scene"></canvas>
+
+    <!-- Gives the document something to scroll. Height comes from
+         --scroll-pages so there is exactly one place that controls it. -->
+    <div id="scroll-track" aria-hidden="true"></div>
+
+    <div id="hud"></div>
+
+    <div id="loader">
+      <div class="loader-inner">
+        <p class="loader-name">Muhammad Rafif Azzaki</p>
+        <div class="loader-track"><div id="loader-bar"></div></div>
+        <p id="loader-text">Loading 0%</p>
+      </div>
+    </div>
+
+    <noscript>
+      <div class="noscript">
+        This portfolio is an interactive 3D scene and needs JavaScript.
+        You can still reach me on
+        <a href="https://www.linkedin.com/in/rafifazzaki/">LinkedIn</a>.
+      </div>
+    </noscript>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

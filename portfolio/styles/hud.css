@@ -1,0 +1,648 @@
+/*
+ * HUD layout.
+ *
+ * The overlay is a single fixed grid with one row per region, so the
+ * detail card and the hint line are structurally incapable of overlapping
+ * — which is what went wrong before, when `#footer-project` and
+ * `#true-footer` were both pinned to `bottom: 0`.
+ *
+ * The overlay itself is click-through; each interactive piece turns
+ * pointer events back on, so dragging the canvas still works everywhere
+ * the HUD is not actually drawn.
+ */
+
+#hud {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-hud);
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  grid-template-areas:
+    "nav"
+    "stage"
+    "detail"
+    "hint";
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  pointer-events: none;
+}
+
+#hud > * {
+  pointer-events: auto;
+}
+
+/*
+ * Specificity note: `#hud > *` above would otherwise win over the class
+ * selector and make this full-viewport layer swallow every click and drag
+ * meant for the canvas underneath.
+ */
+#hud > .hud-labels,
+#hud > .hud-rail {
+  pointer-events: none;
+}
+
+/* Grid items are static by default, so they need positioning for z-index
+   to apply at all — otherwise the label layer, appended last, paints over
+   the nav and the detail card. */
+.hud-nav,
+.hud-detail,
+.hud-hint {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------------------------------------------------------------- nav -- */
+
+.hud-nav {
+  grid-area: nav;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: var(--gutter);
+  background: linear-gradient(
+    to bottom,
+    rgba(13, 15, 18, 0.72),
+    rgba(13, 15, 18, 0)
+  );
+}
+
+.hud-brand {
+  font-size: clamp(1rem, 2.4vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 6px 2px;
+}
+
+.hud-brand:hover {
+  color: var(--accent);
+}
+
+.hud-brand-short {
+  display: none;
+}
+
+.hud-links {
+  display: flex;
+  gap: 8px;
+}
+
+.hud-links button {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  font-size: 0.95rem;
+  transition: border-color 0.18s, color 0.18s, background 0.18s;
+}
+
+.hud-links button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ------------------------------------------------------- scene labels -- */
+
+/*
+ * Tags projected from world space onto the scene. The layer spans the
+ * viewport and never takes pointer events — the objects underneath stay
+ * draggable and clickable through it.
+ */
+.hud-labels {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.25s ease;
+}
+
+.hud-labels.is-hidden {
+  opacity: 0;
+}
+
+.scene-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* One row, not stacked: half the height means far fewer collisions. */
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 7px;
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(13, 16, 21, 0.62);
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.35s ease, border-color 0.2s, background 0.2s;
+  will-change: transform;
+}
+
+.scene-label.is-visible {
+  opacity: 0.75;
+}
+
+.scene-label.is-hovered {
+  opacity: 1;
+  border-color: var(--accent);
+  background: rgba(13, 16, 21, 0.85);
+}
+
+.scene-label-title {
+  font-size: 0.68rem;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.scene-label-date {
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .scene-label {
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  .scene-label-title {
+    font-size: 0.62rem;
+  }
+
+  .scene-label-date {
+    font-size: 0.55rem;
+  }
+}
+
+/* --------------------------------------------------------------- rail -- */
+
+/*
+ * Jump targets, not a second progress bar. The 3D track in the scene says
+ * where you are; this says where you can go, and names what is there.
+ */
+.hud-rail {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--gutter) * 0.5);
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/*
+ * The item is as wide as its label, which is most of the screen. Letting
+ * it take pointer events would put an invisible band over the canvas and
+ * swallow drags meant for the scene, so only the dot is hit-testable —
+ * :hover still applies to the item when the dot inside it is hovered, and
+ * clicks bubble to the delegated handler on #hud.
+ */
+.rail-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 5px 2px 5px 10px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.rail-dot {
+  position: relative;
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  pointer-events: auto;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s,
+    box-shadow 0.25s;
+}
+
+/* Expands the 9px dot to a comfortable target without resizing it. */
+.rail-dot::after {
+  content: "";
+  position: absolute;
+  inset: -9px -7px;
+  border-radius: 999px;
+}
+
+.rail-item.is-active .rail-dot {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.rail-item.is-current .rail-dot {
+  transform: scale(1.35);
+  box-shadow: 0 0 10px rgba(91, 157, 255, 0.6);
+}
+
+.rail-item:hover .rail-dot,
+.rail-item:focus-visible .rail-dot {
+  border-color: var(--text);
+  transform: scale(1.35);
+}
+
+.rail-label {
+  max-width: min(260px, 40vw);
+  font-size: 0.74rem;
+  line-height: 1.3;
+  text-align: right;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  translate: 8px 0;
+  transition: opacity 0.22s ease, translate 0.22s ease;
+  pointer-events: none;
+}
+
+.rail-item:hover .rail-label,
+.rail-item:focus-visible .rail-label {
+  opacity: 1;
+  translate: 0 0;
+  color: var(--text);
+}
+
+/* Touch has no hover, so the labels would never be reachable. */
+@media (hover: none) {
+  .rail-label {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------- detail -- */
+
+.hud-detail {
+  grid-area: detail;
+  justify-self: start;
+  width: min(460px, calc(100vw - var(--gutter) * 2));
+  margin: 0 var(--gutter) 12px;
+  padding: 20px 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  position: relative;
+  opacity: 0;
+  translate: 0 14px;
+  visibility: hidden;
+  transition: opacity 0.28s ease, translate 0.28s ease, visibility 0.28s;
+}
+
+.hud-detail[data-open="true"] {
+  opacity: 1;
+  translate: 0 0;
+  visibility: visible;
+}
+
+.hud-detail-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--text-dim);
+}
+
+.hud-detail-close:hover {
+  color: var(--text);
+}
+
+.hud-detail-year {
+  margin: 0 0 2px;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.hud-detail-year[hidden] {
+  display: none;
+}
+
+.hud-detail-title {
+  margin: 0 28px 6px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.hud-detail-desc {
+  margin: 0 0 12px;
+  font-size: 0.92rem;
+  color: var(--text-dim);
+}
+
+.hud-detail-tags,
+.hud-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.hud-detail-tags li,
+.hud-tags li {
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.hud-detail-links {
+  display: flex;
+  gap: 8px;
+}
+
+.hud-chip {
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #06111f;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.hud-chip:hover {
+  text-decoration: none;
+  filter: brightness(1.1);
+}
+
+.hud-chip[hidden] {
+  display: none;
+}
+
+/* --------------------------------------------------------------- hint -- */
+
+.hud-hint {
+  grid-area: hint;
+  margin: 0;
+  padding: 0 var(--gutter) calc(var(--gutter) * 0.7);
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  transition: opacity 0.4s ease;
+}
+
+.hud-hint-mobile {
+  display: none;
+}
+
+/* Fades out once the user has started exploring. */
+body.is-ready .hud-hint {
+  opacity: 0.75;
+}
+
+/* -------------------------------------------------------------- panel -- */
+
+.hud-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scrim);
+  background: rgba(6, 8, 11, 0.55);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s;
+}
+
+.hud-scrim.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hud-panel {
+  position: fixed;
+  z-index: var(--z-panel);
+  top: 0;
+  right: 0;
+  width: min(520px, 100vw);
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: calc(var(--gutter) * 1.6) var(--gutter) var(--gutter);
+  background: var(--surface-strong);
+  border-left: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  translate: 100% 0;
+  visibility: hidden;
+  transition: translate 0.36s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.36s;
+}
+
+.hud-panel.is-open {
+  translate: 0 0;
+  visibility: visible;
+}
+
+.hud-panel-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--text-dim);
+}
+
+.hud-panel-close:hover {
+  color: var(--text);
+}
+
+.hud-panel h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 28px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hud-panel h2:first-of-type {
+  margin-top: 0;
+}
+
+.hud-panel h2 small {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+.hud-cta {
+  display: inline-block;
+  padding: 9px 22px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #06111f;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.hud-cta:hover {
+  text-decoration: none;
+  filter: brightness(1.1);
+}
+
+.hud-project-list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+
+/* Title and year on one baseline, year pinned right with a leader gap. */
+.hud-project-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.hud-project-list h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.hud-year {
+  flex: none;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.hud-cv-updated {
+  margin: 8px 0 0;
+  font-size: 0.76rem;
+  color: var(--text-dim);
+}
+
+.hud-project-list p {
+  margin: 0 0 8px;
+  font-size: 0.86rem;
+  color: var(--text-dim);
+}
+
+.hud-attribution {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
+.hud-attribution li {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.hud-tagline {
+  color: var(--text-dim);
+  margin: 0 0 18px;
+}
+
+.hud-contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hud-contact-links a {
+  padding: 9px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.hud-contact-links a:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+}
+
+/* ------------------------------------------------------------- mobile -- */
+
+@media (max-width: 720px) {
+  .hud-brand-full {
+    display: none;
+  }
+
+  .hud-brand-short {
+    display: inline;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+  }
+
+  .hud-links button {
+    padding: 7px 13px;
+    font-size: 0.85rem;
+  }
+
+  .hud-rail {
+    right: 6px;
+    gap: 2px;
+  }
+
+  .hud-detail {
+    justify-self: stretch;
+    width: auto;
+    margin: 0 12px 10px;
+    padding: 16px 18px;
+  }
+
+  .hud-detail-title {
+    font-size: 1rem;
+  }
+
+  .hud-hint {
+    font-size: 0.68rem;
+    padding-bottom: 14px;
+  }
+
+  .hud-hint-desktop {
+    display: none;
+  }
+
+  .hud-hint-mobile {
+    display: inline;
+  }
+
+  .hud-panel {
+    width: 100vw;
+    border-left: none;
+  }
+}
+
+/* Short landscape phones: drop the hint so the card still fits. */
+@media (max-height: 480px) {
+  .hud-hint {
+    display: none;
+  }
+
+  .hud-detail {
+    padding: 12px 16px;
+  }
+
+  .hud-detail-desc {
+    display: none;
+  }
+}

@@ -1,0 +1,28 @@
+# Dependencies are installed per sub-project, never committed.
+# The root node_modules was tracked until now (954 files); it is untracked
+# from this commit on. The blobs stay in history, so a clone is still the
+# same size — removing them would need a history rewrite, which is not
+# worth doing to a published repo.
+node_modules
+
+dist
+dist-ssr
+*.local
+
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

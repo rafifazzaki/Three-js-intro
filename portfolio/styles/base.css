@@ -1,0 +1,153 @@
+/*
+ * Base layer: resets, tokens, canvas and scroll track.
+ *
+ * Note what is NOT here: a `* { font-size: 1.5rem }` rule. The old sheet
+ * opened with one, which forced a size onto every element on the page and
+ * then had to be undone piecemeal everywhere else.
+ */
+
+:root {
+  --bg: #0d0f12;
+  --surface: rgba(20, 24, 30, 0.82);
+  --surface-strong: rgba(14, 17, 22, 0.95);
+  --border: rgba(255, 255, 255, 0.12);
+  --text: #eef3f8;
+  --text-dim: rgba(238, 243, 248, 0.66);
+  --accent: #5b9dff;
+  --accent-warm: #e58943;
+
+  --radius: 14px;
+  --gutter: clamp(16px, 3vw, 32px);
+
+  --font: "Century Gothic", CenturyGothic, "Futura", Geneva, AppleGothic,
+    system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Overlay stacking, declared once so nothing has to guess. */
+  --z-canvas: 0;
+  --z-track: 1;
+  --z-hud: 10;
+  --z-scrim: 20;
+  --z-panel: 30;
+  --z-loader: 100;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: block;
+  z-index: var(--z-canvas);
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+#scene:active {
+  cursor: grabbing;
+}
+
+/*
+ * The only thing that sets page height. `--scroll-pages` is written once
+ * by main.js from config.js.
+ */
+#scroll-track {
+  position: relative;
+  z-index: var(--z-track);
+  height: calc(var(--scroll-pages, 4) * 100vh);
+  pointer-events: none;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration: underline;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/*
+ * Capture mode (?capture=1). Everything except the canvas is removed, so
+ * the recorded clip is the 3D scene and nothing else — no scrollbar, no
+ * progress dots, no nav, no hint line. The canvas is pinned at the exact
+ * output size so the backing store matches the encoded video 1:1.
+ */
+html.is-capturing,
+html.is-capturing body {
+  overflow: hidden;
+  background: var(--bg);
+}
+
+html.is-capturing #hud,
+html.is-capturing #loader,
+html.is-capturing #scroll-track {
+  display: none !important;
+}
+
+html.is-capturing #scene {
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: var(--capture-w, 720px);
+  height: var(--capture-h, 720px);
+}
+
+.noscript {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  padding: var(--gutter);
+  text-align: center;
+  background: var(--bg);
+  z-index: var(--z-loader);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
